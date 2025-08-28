@@ -8,7 +8,7 @@ import Contact from './Components/Contact'
 import  Services from './Components/Services'
 function App() {
   return (
-         <>
+         <div className='bg-black overflow-x-hidden w-screen'>
          <NavBar />
          <Hero />
          <About />
@@ -17,7 +17,7 @@ function App() {
          <TechStack />
 
          <Contact />
-         </> 
+         </div> 
  )
 }
 
