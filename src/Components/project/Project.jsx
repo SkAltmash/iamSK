@@ -1,6 +1,5 @@
 import React from "react";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
-import { motion } from "framer-motion";
 
 const projectsItems = [
   { 
@@ -40,16 +39,6 @@ const projectsItems = [
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } },
-};
-
 function Project() {
   return (
     <section id="projects" className="w-screen bg-black py-10">
@@ -64,26 +53,17 @@ function Project() {
       </div>
 
       {/* Projects Grid */}
-      <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 md:px-10"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 md:px-10">
         {projectsItems.map((project) => (
-          <motion.div
+          <div
             key={project.id}
             className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 flex flex-col"
-            variants={cardVariants}
           >
-            {/* Image with hover scale */}
-            <motion.img
+            {/* Image */}
+            <img
               src={project.image}
               alt={project.text}
-              className="w-full h-60 object-cover rounded-2xl"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 120 }}
+              className="w-full h-60 object-cover rounded-2xl hover:scale-105 transition-transform duration-300"
             />
 
             {/* Project info */}
@@ -114,11 +94,9 @@ function Project() {
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
-
-   
+      </div>
     </section>
   );
 }

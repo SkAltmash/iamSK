@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { FaEnvelope, FaGithub, FaLinkedin, FaPaperPlane } from "react-icons/fa";
-import { motion } from "framer-motion";
 
 export default function Contact() {
   const form = useRef();
@@ -32,57 +31,22 @@ export default function Contact() {
       });
   };
 
-  // Motion variants
-  const fadeUpVariant = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 20 } },
-  };
-
-  const staggerContainer = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.15 } },
-  };
-
-  const inputVariant = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 120 } },
-  };
-
-  const iconVariant = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: i * 0.2, type: "spring", stiffness: 120 },
-    }),
-  };
-
   return (
     <section id="contact" className="py-20 w-screen bg-black text-white relative overflow-hidden">
       <div className="absolute inset-0" />
-      <motion.div
-        className="relative z-10 max-w-4xl mx-auto px-6"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={staggerContainer}
-      >
+      <div className="relative z-10 max-w-4xl mx-auto px-6">
         {/* Heading */}
-        <motion.h2
-          className="text-3xl md:text-4xl font-bold text-center mb-10 text-white"
-          variants={fadeUpVariant}
-        >
-          Send a <span className="text-[#15AABF]"> Message</span> 
-        </motion.h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-white">
+          Send a <span className="text-[#15AABF]"> Message</span>
+        </h2>
 
         {/* Form */}
-        <motion.form
+        <form
           ref={form}
           onSubmit={sendEmail}
           className="space-y-6 bg-white/10 p-8 rounded-2xl backdrop-blur-md border border-white/20"
-          variants={staggerContainer}
         >
-          <motion.div variants={inputVariant}>
+          <div>
             <label htmlFor="user_name" className="block mb-1 text-[#15AABF]">Your Name</label>
             <input
               type="text"
@@ -91,9 +55,9 @@ export default function Contact() {
               required
               className="w-full p-3 rounded-lg bg-black/70 text-white border border-[#15AABF] focus:outline-none focus:ring-2 focus:ring-[#15AABF] focus:border-[#15AABF] transition"
             />
-          </motion.div>
+          </div>
 
-          <motion.div variants={inputVariant}>
+          <div>
             <label htmlFor="user_email" className="block mb-1 text-[#15AABF]">Your Email</label>
             <input
               type="email"
@@ -102,9 +66,9 @@ export default function Contact() {
               required
               className="w-full p-3 rounded-lg bg-black/70 text-white border border-[#15AABF] focus:outline-none focus:ring-2 focus:ring-[#15AABF] focus:border-[#15AABF] transition"
             />
-          </motion.div>
+          </div>
 
-          <motion.div variants={inputVariant}>
+          <div>
             <label htmlFor="message" className="block mb-1 text-[#15AABF]">Message</label>
             <textarea
               id="message"
@@ -113,18 +77,15 @@ export default function Contact() {
               required
               className="w-full p-3 rounded-lg bg-black/70 text-white border border-[#15AABF] focus:outline-none focus:ring-2 focus:ring-[#15AABF] focus:border-[#15AABF] transition"
             ></textarea>
-          </motion.div>
+          </div>
 
           {/* Submit Button */}
-          <motion.button
+          <button
             type="submit"
             disabled={loading}
             className={`w-full py-3 rounded-lg font-semibold flex justify-center items-center gap-2 transition ${
               loading ? 'bg-indigo-300 cursor-not-allowed' : 'bg-[#15AABF] hover:bg-[#1297a8]'
             } text-white`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            variants={fadeUpVariant}
           >
             {loading ? (
               <>
@@ -139,43 +100,46 @@ export default function Contact() {
                 <FaPaperPlane /> Send Your Message
               </>
             )}
-          </motion.button>
+          </button>
 
           {sent && (
-            <motion.p
-              className="text-green-400 text-center font-medium mt-4"
-              variants={fadeUpVariant}
-            >
+            <p className="text-green-400 text-center font-medium mt-4">
               Message launched successfully!
-            </motion.p>
+            </p>
           )}
-        </motion.form>
+        </form>
 
         {/* Social Icons */}
         <div className="mt-12 text-center space-y-4">
-          <motion.p
-            className="text-gray-300"
-            variants={fadeUpVariant}
-          >
-            Or connect with me on:
-          </motion.p>
+          <p className="text-gray-300">Or connect with me on:</p>
           <div className="flex justify-center gap-6 text-white text-2xl">
-            {[FaEnvelope, FaLinkedin, FaGithub].map((Icon, i) => (
-              <motion.a
-                key={i}
-                href={i === 0 ? "mailto:skaltmash3@gmail.com" : i === 1 ? "https://linkedin.com/in/altamash-sheikh-1ba6a72aa" : "https://github.com/SkAltmash"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#15AABF] transition"
-                custom={i}
-                variants={iconVariant}
-              >
-                <Icon />
-              </motion.a>
-            ))}
+            <a
+              href="mailto:skaltmash3@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#15AABF] transition"
+            >
+              <FaEnvelope />
+            </a>
+            <a
+              href="https://linkedin.com/in/altamash-sheikh-1ba6a72aa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#15AABF] transition"
+            >
+              <FaLinkedin />
+            </a>
+            <a
+              href="https://github.com/SkAltmash"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#15AABF] transition"
+            >
+              <FaGithub />
+            </a>
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

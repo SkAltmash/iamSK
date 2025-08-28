@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { motion } from "framer-motion";
 import {
   SiHtml5,
   SiCss3,
@@ -63,24 +62,6 @@ const techGroups = [
   },
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 18, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: "spring", stiffness: 140, damping: 14 },
-  },
-};
-
 function useTilt() {
   const ref = useRef(null);
 
@@ -112,43 +93,27 @@ const TechStack = () => {
         style={{ background: `radial-gradient(600px 200px at 50% 0%, ${ACCENT}, transparent 60%)` }}
       />
 
-      <motion.div
-        className="max-w-6xl mx-auto"
-        variants={container}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.25 }}
-      >
-        <motion.h3
-          className="text-3xl md:text-4xl font-bold tracking-tight mb-8 text-center"
-          variants={item}
-        >
+      <div className="max-w-6xl mx-auto">
+        <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-8 text-center">
           Tech <span style={{ color: ACCENT }}>Stack</span>
-        </motion.h3>
+        </h3>
 
-        <motion.p
-          className="text-gray-400 text-center max-w-3xl mx-auto mb-12"
-          variants={item}
-        >
+        <p className="text-gray-400 text-center max-w-3xl mx-auto mb-12">
           Here's the technology I use across frontend, backend, tools, and languages to build powerful apps.
-        </motion.p>
+        </p>
 
         <div className="space-y-12">
           {techGroups.map((group) => (
             <div key={group.category}>
-              <motion.h4
-                className="text-2xl font-semibold mb-6 text-center"
-                style={{ color: ACCENT }}
-                variants={item}
-              >
+              <h4 className="text-2xl font-semibold mb-6 text-center" style={{ color: ACCENT }}>
                 {group.category}
-              </motion.h4>
+              </h4>
 
               <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
                 {group.items.map(({ label, Icon, color }) => {
                   const { ref, onMove, onLeave } = useTilt();
                   return (
-                    <motion.li key={label} variants={item}>
+                    <li key={label}>
                       <div
                         ref={ref}
                         onMouseMove={onMove}
@@ -182,14 +147,14 @@ const TechStack = () => {
                           style={{ background: ACCENT }}
                         />
                       </div>
-                    </motion.li>
+                    </li>
                   );
                 })}
               </ul>
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };
