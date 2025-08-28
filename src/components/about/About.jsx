@@ -4,7 +4,7 @@ import CountUp from './CountUp';
 
 const About = () => {
   return (
-    <section className="w-full mt-15 min-h-screen bg-black text-white flex justify-center items-center px-4">
+    <section className="w-full mt-18 min-h-screen bg-black text-white flex justify-center items-center px-4">
       <div className="max-w-[600px] w-full text-center">
         {/* Profile Photo */}
         <motion.img

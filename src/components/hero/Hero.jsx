@@ -77,7 +77,7 @@ const Hero = () => {
           transition={{ delay: 0.8, duration: 0.6 }}
         >
           <motion.a
-            href="#projects"
+            href="/projects"
             className="px-5 py-2 border border-[#00ffff] rounded-full text-black bg-[#00ffff] hover:text-black transition"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
