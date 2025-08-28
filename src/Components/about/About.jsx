@@ -42,7 +42,7 @@ const About = () => {
         >
           <div className="absolute -inset-3 bg-[#15AABF] opacity-30 blur-2xl rounded-3xl"></div>
           <img
-            src="../../../public/logo.png"
+            src="public/logo.png"
             alt="Altamash Sheikh"
             className="relative w-52 h-52 rounded-3xl object-cover border-4 border-[#15AABF] shadow-[0_10px_40px_rgba(21,170,191,0.4)]"
           />
