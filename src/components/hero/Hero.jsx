@@ -11,7 +11,7 @@ const Hero = () => {
           raysColor="#00ffff"
           raysSpeed={1.5}
           lightSpread={0.8}
-          rayLength={2}
+          rayLength={10}
           followMouse={true}
           mouseInfluence={0.1}
           noiseAmount={0.1}
@@ -33,7 +33,7 @@ const Hero = () => {
           <a
             href="#projects"
             className="px-5 py-3 rounded-full transition"
-            style={{ backgroundColor: "#00ffff", color: "white" }}
+            style={{ backgroundColor: "#00ffff", color: "black" }}
           >
             View My Work
           </a>
@@ -46,7 +46,7 @@ const Hero = () => {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = "#00ffff";
-              e.currentTarget.style.color = "white";
+              e.currentTarget.style.color = "black";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";
