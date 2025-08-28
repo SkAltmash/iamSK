@@ -1,20 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faReact,
-  faCss3Alt,
-  faJs,
-  faHtml5,
-  faGithub,
-} from "@fortawesome/free-brands-svg-icons";
-import { faServer } from "@fortawesome/free-solid-svg-icons";
+import { faReact, faCss3Alt, faJs, faHtml5, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faServer, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 
 const projects = [
   {
     slug: "zap-split",
     title: "ZapSplit",
     image: "ZapSplit.jpg",
+    video: "/videos/ZapSplit-Video.webm",
     description:
       "ZapSplit is your all-in-one money management solution. Top up your wallet, split bills, earn rewards, pay later, and stay on top of your finances — all in one app.",
     link: "https://zapsplit.netlify.app/",
@@ -64,8 +59,10 @@ const projects = [
 ];
 
 const Projects = () => {
+  const [activeVideo, setActiveVideo] = useState(null);
+
   return (
-    <section className="relative bg-black text-white min-h-screen py-16 px-6">
+    <section className="relative mt-15 bg-black text-white min-h-screen py-16 px-6">
       {/* Header Section */}
       <div className="max-w-[600px] mx-auto text-center mb-12">
         <h2 className="text-4xl font-bold mb-4" style={{ color: "#00ffff" }}>
@@ -87,23 +84,43 @@ const Projects = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.2, duration: 0.6 }}
           >
-            {/* Project Image */}
-            <a href={project.link} target="_blank" rel="noopener noreferrer">
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-70 object-cover hover:scale-105 transition-transform duration-300"
-              />
-            </a>
+            <div className="relative">
+              {/* Project Image or Video */}
+              {activeVideo === project.slug && project.video ? (
+                <video
+                  src={project.video}
+                  autoPlay
+                  loop
+                  muted
+                  className="w-full h-75 object-cover"
+                />
+              ) : (
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-75 object-cover"
+                />
+              )}
+
+              {/* Video Icon Overlay */}
+              {project.video && (
+                <button
+                  onClick={() =>
+                    setActiveVideo(activeVideo === project.slug ? null : project.slug)
+                  }
+                  className="absolute bottom-3 right-3 bg-black/60 p-3 rounded-full text-white hover:bg-black/80 transition"
+                >
+                  <FontAwesomeIcon icon={faPlayCircle} className="text-2xl" />
+                </button>
+              )}
+            </div>
 
             {/* Project Details */}
             <div className="p-4">
               <h3 className="text-2xl font-semibold text-[#00ffff] mb-2">
                 {project.title}
               </h3>
-              <p className="text-gray-400 text-sm mb-4">
-                {project.description}
-              </p>
+              <p className="text-gray-400 text-sm mb-4">{project.description}</p>
 
               {/* Technologies Used */}
               <div className="flex flex-wrap gap-3 mb-4">

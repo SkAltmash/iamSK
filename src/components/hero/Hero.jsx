@@ -12,7 +12,7 @@ const Hero = () => {
           speed={1}
           squareSize={80}
           direction="diagonal"
-          borderColor="#121212"
+          borderColor="#ffffff"
           hoverFillColor="#00ffff"
         />
       </div>

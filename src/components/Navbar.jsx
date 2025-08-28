@@ -18,7 +18,7 @@ const Navbar = () => {
           <img
             src="logo.png"
             alt="Logo"
-            className="h-10 w-10 transform transition-transform duration-700 hover:rotate-[360deg]"
+            className="h-20 w-20 transform transition-transform duration-700 hover:rotate-[360deg]"
           />
         </NavLink>
 
