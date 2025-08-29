@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CountUp from "./CountUp";
-
+import ElectricBorder from './ElectricBorder'
 const About = () => {
   const [activeTab, setActiveTab] = useState("about");
 
@@ -52,14 +52,22 @@ const About = () => {
               exit="exit"
               transition={{ duration: 0.5 }}
             >
+              <ElectricBorder
+               color="#7df9ff"
+               speed={1}
+               chaos={0.5}
+               thickness={2}
+               className="w-35 h-35 mx-auto mb-2"
+               >
               <motion.img
                 src="logo.png"
                 alt="Altamash"
-                className="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-[#00ffff] object-cover"
+                className="w-35 h-35 rounded-lg mx-auto mb-6  object-cover"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
               />
+              </ElectricBorder>
               <h1 className="text-4xl sm:text-5xl font-bold mb-4">
                 About <span style={{ color: "#00ffff" }}>Me</span>
               </h1>

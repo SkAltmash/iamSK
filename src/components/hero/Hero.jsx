@@ -2,9 +2,15 @@ import React from "react";
 import { motion } from "framer-motion";
 import Squares from "./Squares";
 import RotatingText from "./RotatingText";
-
+import TargetCursor from "./TargetCursor";
 const Hero = () => {
   return (
+    <div>
+    
+      <TargetCursor 
+        spinDuration={2}
+        hideDefaultCursor={true}
+      />
     <section className="relative w-full h-screen flex justify-center items-center bg-black overflow-hidden text-white">
       {/* Background Animation */}
       <div className="absolute inset-0 z-0">
@@ -78,7 +84,7 @@ const Hero = () => {
         >
           <motion.a
             href="/projects"
-            className="px-5 py-2 border border-[#00ffff] rounded-lg text-black bg-[#00ffff] hover:text-black transition"
+            className="cursor-target px-5 py-2 border border-[#00ffff] rounded-lg text-black bg-[#00ffff] hover:text-black transition"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -86,7 +92,7 @@ const Hero = () => {
           </motion.a>
           <motion.a
             href="/contact"
-            className="px-5 py-2 border border-[#00ffff] rounded-lg text-[#00ffff] hover:bg-[#00ffff] hover:text-black transition"
+            className="cursor-target px-5 py-2 border border-[#00ffff] rounded-lg text-[#00ffff] hover:bg-[#00ffff] hover:text-black transition"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -95,6 +101,7 @@ const Hero = () => {
         </motion.div>
       </motion.div>
     </section>
+    </div>
   );
 };
 
