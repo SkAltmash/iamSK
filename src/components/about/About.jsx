@@ -1,98 +1,183 @@
-import React from "react";
-import { motion } from "framer-motion";
-import CountUp from './CountUp';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import CountUp from "./CountUp";
 
 const About = () => {
+  const [activeTab, setActiveTab] = useState("about");
+
+  const tabContentVariants = {
+    initial: { opacity: 0, x: 30 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -30 },
+  };
+
   return (
-    <section className="w-full mt-18 min-h-screen bg-black text-white flex justify-center items-center px-4">
-      <div className="max-w-[600px] w-full text-center">
-        {/* Profile Photo */}
-        <motion.img
-          src="logo.png" // Replace with your actual photo path
-          alt="Altamash"
-          className="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-[#00ffff] object-cover"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        />
+    <section
+      className={`w-full ${
+        activeTab === "about" ? "mt-25" : "mt-15"
+      } min-h-screen bg-black text-white flex justify-center items-center px-4`}
+    >
+      <div className="max-w-[700px] w-full text-center">
+        {/* Tabs */}
+        <div className="flex justify-center gap-6 mb-8">
+          <button
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === "about"
+                ? "bg-[#00ffff] text-black"
+                : "bg-[#111] text-gray-400 border border-[#00ffff] hover:bg-[#00ffff] hover:text-black"
+            }`}
+            onClick={() => setActiveTab("about")}
+          >
+            About Me
+          </button>
+          <button
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === "education"
+                ? "bg-[#00ffff] text-black"
+                : "bg-[#111] text-gray-400 border border-[#00ffff] hover:bg-[#00ffff] hover:text-black"
+            }`}
+            onClick={() => setActiveTab("education")}
+          >
+            Education
+          </button>
+        </div>
 
-        {/* Heading */}
-        <motion.h1
-          className="text-4xl sm:text-5xl font-bold mb-4"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-        >
-          About <span style={{ color: "#00ffff" }}>Me</span>
-        </motion.h1>
+        <AnimatePresence mode="wait">
+          {activeTab === "about" && (
+            <motion.div
+              key="about"
+              variants={tabContentVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.5 }}
+            >
+              <motion.img
+                src="logo.png"
+                alt="Altamash"
+                className="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-[#00ffff] object-cover"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              />
+              <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+                About <span style={{ color: "#00ffff" }}>Me</span>
+              </h1>
+              <h2 className="text-lg sm:text-xl font-medium text-gray-400 mb-6">
+                Creative Thinker • Full Stack Developer • Problem Solver
+              </h2>
+              <p className="text-gray-300 text-base sm:text-lg leading-relaxed mb-8">
+                I’m Altamash, a passionate full stack developer skilled in
+                building both web and mobile applications. With expertise in
+                React, React Native, Node.js, Firebase, and SQL, I transform
+                innovative ideas into scalable, high-performance solutions that
+                deliver seamless user experiences.
+              </p>
+              <div className="grid grid-cols-3 gap-6 mb-8">
+                <div className="flex flex-col items-center">
+                  <span className="text-3xl font-bold text-[#00ffff]">
+                    <CountUp from={0} to={3} duration={1} />+
+                  </span>
+                  <span className="text-sm text-gray-400">Years Learning</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-3xl font-bold text-[#00ffff]">
+                    <CountUp from={0} to={15} duration={1} />+
+                  </span>
+                  <span className="text-sm text-gray-400">
+                    Projects Completed
+                  </span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-3xl font-bold text-[#00ffff]">
+                    <CountUp from={0} to={10} duration={1} />+
+                  </span>
+                  <span className="text-sm text-gray-400">
+                    Full Stack Technologies
+                  </span>
+                </div>
+              </div>
+              <a
+                href="/contact"
+                className="inline-block px-8 py-3 rounded-full text-black font-medium"
+                style={{ backgroundColor: "#00ffff" }}
+              >
+                Let’s Connect
+              </a>
+            </motion.div>
+          )}
 
-        {/* Tagline */}
-        <motion.h2
-          className="text-lg sm:text-xl font-medium text-gray-400 mb-6"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
-          Creative Thinker • Full Stack Developer • Problem Solver
-        </motion.h2>
+          {activeTab === "education" && (
+            <motion.div
+              key="education"
+              variants={tabContentVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.5 }}
+              className="text-left"
+            >
+              <h1 className="text-3xl font-bold mb-6 text-center">
+                Education <span style={{ color: "#00ffff" }}>Journey</span>
+              </h1>
+              <ul className="space-y-4">
+                <li className="bg-[#111] p-4 rounded-lg flex gap-4 items-center">
+                  <img
+                    src="SSC - Maharashtra Board.webp"
+                    alt="SSC - Maharashtra Board"
+                    className="w-12 h-12 rounded-md object-cover"
+                  />
+                  <div>
+                    <h2 className="text-xl font-semibold text-[#00ffff]">
+                      SSC - Maharashtra Board
+                    </h2>
+                    <p className="text-gray-400 text-sm flex items-center gap-2">
+                   Sangay Gandhi High School, Hinganghat
+                    </p>
+                    <p className="text-gray-400 text-sm">Completed: 2019</p>
+                  </div>
+                </li>
 
-        {/* Description */}
-        <motion.p
-          className="text-gray-300 text-base sm:text-lg leading-relaxed mb-8"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-        >
-          I’m Altamash, a passionate full stack developer skilled in building
-          both web and mobile applications. With expertise in React, React
-          Native, Node.js, Firebase, and SQL, I transform innovative ideas into
-          scalable, high-performance solutions that deliver seamless user
-          experiences.
-        </motion.p>
+                <li className="bg-[#111] p-4 rounded-lg flex gap-4 items-center">
+                    <img
+                    src="SSC - Maharashtra Board.webp"
+                    alt="SSC - Maharashtra Board"
+                    className="w-12 h-12 rounded-md object-cover"
+                  />
+                  <div>
+                    <h2 className="text-xl font-semibold text-[#00ffff]">
+                      HSC (CS) - Maharashtra Board
+                    </h2>
+                    <p className="text-gray-400 text-sm flex items-center gap-2">
+                   Dr. B.R. Ambedkar Jr. College,
+                      Hinganghat
+                    </p>
+                    <p className="text-gray-400 text-sm">Completed: 2021</p>
+                  </div>
+                </li>
 
-        {/* Highlights / Stats */}
-        <motion.div
-          className="grid grid-cols-3 gap-6 mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-        >
-          {/* Years of Experience */}
-          <div className="flex flex-col items-center">
-            <span className="text-3xl font-bold text-[#00ffff]">
-              <CountUp from={0} to={3} duration={1} className="count-up-text" />+
-            </span>
-            <span className="text-sm text-gray-400">Years Learning</span>
-          </div>
-
-          {/* Projects Completed */}
-          <div className="flex flex-col items-center">
-            <span className="text-3xl font-bold text-[#00ffff]">
-              <CountUp from={0} to={15} duration={1} className="count-up-text" />+
-            </span>
-            <span className="text-sm text-gray-400">Projects Completed</span>
-          </div>
-
-          {/* Full Stack Technologies */}
-          <div className="flex flex-col items-center">
-            <span className="text-3xl font-bold text-[#00ffff]">
-              <CountUp from={0} to={10} duration={1} className="count-up-text" />+
-            </span>
-            <span className="text-sm text-gray-400">Full Stack Technologies</span>
-          </div>
-        </motion.div>
-
-        {/* Call to Action */}
-        <motion.a
-          href="/contact"
-          className="inline-block px-8 py-3 rounded-full text-black font-medium"
-          style={{ backgroundColor: "#00ffff" }}
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 1, duration: 0.6 }}
-        >
-          Let’s Connect
-        </motion.a>
+                <li className="bg-[#111] p-4 rounded-lg flex gap-4 items-center">
+                  <img
+                    src="RTMNU.jpg"
+                    alt="RTMNU Nagpur"
+                    className="w-12 h-12 rounded-md object-cover"
+                  />
+                  <div>
+                    <h2 className="text-xl font-semibold text-[#00ffff]">
+                      BCA - RTMNU University
+                    </h2>
+                    <p className="text-gray-400 text-sm flex items-center gap-2">
+                     RAICSIT, Wardha
+                    </p>
+                    <p className="text-gray-400 text-sm">
+                      Duration: 2022 – 2026 (Currently in 3rd Year)
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );

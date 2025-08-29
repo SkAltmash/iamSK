@@ -78,15 +78,15 @@ const Hero = () => {
         >
           <motion.a
             href="/projects"
-            className="px-5 py-2 border border-[#00ffff] rounded-full text-black bg-[#00ffff] hover:text-black transition"
+            className="px-5 py-2 border border-[#00ffff] rounded-lg text-black bg-[#00ffff] hover:text-black transition"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             View Work
           </motion.a>
           <motion.a
-            href="#contact"
-            className="px-5 py-2 border border-[#00ffff] rounded-full text-[#00ffff] hover:bg-[#00ffff] hover:text-black transition"
+            href="/contact"
+            className="px-5 py-2 border border-[#00ffff] rounded-lg text-[#00ffff] hover:bg-[#00ffff] hover:text-black transition"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

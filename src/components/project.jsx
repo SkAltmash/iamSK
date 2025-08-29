@@ -91,36 +91,36 @@ const techStack = [
   {
     category: "Languages",
     items: [
-      { name: "C", icon: faC },
-      { name: "C++", icon: faC },
-      { name: "Python", icon: faPython },
+      { name: "C", icon: faC, color: "#A8B9CC" },
+      { name: "C++", icon: faC, color: "#00599C" },
+      { name: "Python", icon: faPython, color: "#3776AB" },
     ],
   },
   {
     category: "Frontend",
     items: [
-      { name: "React", icon: faReact },
-      { name: "React Native", icon: faReact },
-      { name: "Tailwind CSS", icon: faCss3Alt },
-      { name: "JavaScript", icon: faJs },
-      { name: "TypeScript", icon: faJs },
-      { name: "Framer Motion", icon: faGlobe }, // placeholder
+      { name: "React", icon: faReact, color: "#61DAFB" },
+      { name: "React Native", icon: faReact, color: "#61DAFB" },
+      { name: "Tailwind CSS", icon: faCss3Alt, color: "#38B2AC" },
+      { name: "JavaScript", icon: faJs, color: "#F7DF1E" },
+      { name: "TypeScript", icon: faJs, color: "#3178C6" },
+      { name: "Framer Motion", icon: faGlobe, color: "#FF0055" }, // placeholder
     ],
   },
   {
     category: "Backend",
     items: [
-      { name: "SQL", icon: faDatabase },
-      { name: "Firebase", icon: faServer },
-      { name: "Node.js", icon: faNodeJs },
+      { name: "SQL", icon: faDatabase, color: "#4479A1" },
+      { name: "Firebase", icon: faServer, color: "#FFCA28" },
+      { name: "Node.js", icon: faNodeJs, color: "#339933" },
     ],
   },
   {
     category: "Tools",
     items: [
-      { name: "GitHub", icon: faGithub },
-      { name: "Git", icon: faGitAlt },
-      { name: "Netlify", icon: faGlobe }, // placeholder
+      { name: "GitHub", icon: faGithub, color: "#FFFFFF" },
+      { name: "Git", icon: faGitAlt, color: "#F05032" },
+      { name: "Netlify", icon: faGlobe, color: "#00C7B7" }, // placeholder
     ],
   },
 ];
@@ -241,35 +241,43 @@ const Projects = () => {
 
 
 
-      {activeTab === "techstack" && (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
-          {techStack.map((section, idx) => (
+  {activeTab === "techstack" && (
+  <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
+    {techStack.map((section, idx) => (
+      <motion.div
+        key={idx}
+        className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-2xl p-6 shadow-lg hover:shadow-cyan-500/50 transform hover:scale-105 transition-all duration-300"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: idx * 0.2, type: "spring", stiffness: 120 }}
+      >
+        <h4 className="text-xl font-bold text-[#00ffff] mb-6 border-b border-cyan-500 pb-2">
+          {section.category}
+        </h4>
+        <div className="flex flex-wrap gap-3">
+          {section.items.map((item, i) => (
             <motion.div
-              key={idx}
-              className="bg-[#111] rounded-xl p-6 shadow-md hover:shadow-cyan-500/30 transition-all"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.2, duration: 0.5 }}
+              key={i}
+              className="flex items-center gap-2 px-3 py-1 rounded-lg bg-[#222] text-gray-300 text-sm font-medium hover:bg-cyan-500/20 hover:text-cyan-400 transition-colors duration-200"
+              whileHover={{ scale: 1.05 }}
             >
-              <h4 className="text-xl font-bold text-[#00ffff] mb-4">
-                {section.category}
-              </h4>
-              <div className="flex flex-col gap-3">
-                {section.items.map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 text-gray-300 text-lg"
-                  >
-                    <FontAwesomeIcon icon={item.icon} className="text-xl" />
-                    {item.name}
-                  </div>
-                ))}
-              </div>
+              {/* Icon with color */}
+              <FontAwesomeIcon
+                icon={item.icon}
+                className="text-lg"
+                style={{ color: item.color }}
+              />
+              <span>{item.name}</span>
             </motion.div>
           ))}
         </div>
-      )}
+      </motion.div>
+    ))}
+  </div>
+)}
+
+
     </section>
   );
 };

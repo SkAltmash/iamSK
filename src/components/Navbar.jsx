@@ -63,6 +63,7 @@ const Navbar = () => {
             <NavLink to="/contact" className={linkClasses} onClick={() => setIsOpen(false)}>
               Contact
             </NavLink>
+            
           </div>
         </div>
       )}
