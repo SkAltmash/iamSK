@@ -52,7 +52,7 @@ const Hero = () => {
           </span>
           <RotatingText
             texts={["Coding", "Thinking", "Crafting", "Designing"]}
-            mainClassName="px-3 py-1 bg-cyan-300 text-black rounded-lg"
+            mainClassName="px-3 py-1 bg-cyan-300 text-black rounded-lg cursor-target "
             staggerFrom="last"
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
