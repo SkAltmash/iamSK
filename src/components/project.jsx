@@ -83,7 +83,7 @@ const certificates = [
 const techStack = [
   {
     category: "Languages",
-    items: ["C", "C++", "Python", "JavaScript", "TypeScript"],
+    items: ["C", "C++",  "JavaScript", "TypeScript"],
   },
   {
     category: "Frontend",
@@ -95,7 +95,7 @@ const techStack = [
   },
   {
     category: "Tools",
-    items: ["Git", "GitHub", "Netlify", "VS Code", "Postman"],
+    items: ["Git", "GitHub", "Netlify", "VS Code", "Postman","Sockit.IO"],
   },
 ];
 
