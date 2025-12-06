@@ -168,7 +168,7 @@ const Projects = () => {
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-56 md:h-72 object-cover hover:scale-105 transition-transform duration-300"
+                  className="w-full h-45 sm:h-60 md:h-72 object-cover hover:scale-105 transition-transform duration-300"
                 />
                 <span className="absolute top-3 left-3 px-3 py-[3px] text-[10px] font-bold uppercase rounded-full bg-green-400 text-black shadow">
                   {project.status}
@@ -246,7 +246,7 @@ const Projects = () => {
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-56 md:h-72 object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-45 sm:h-60 md:h-72  object-cover hover:scale-105 transition-transform duration-300"
                   />
                   <span
                     className={`absolute bottom-3 right-3 px-3 py-[3px] text-[10px] font-bold uppercase rounded-full ${
