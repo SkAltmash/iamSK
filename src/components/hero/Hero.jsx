@@ -5,6 +5,7 @@ import RotatingText from "./RotatingText";
 import TargetCursor from "./TargetCursor";
 const Hero = () => {
   return (
+    <>
     <div>
     
       <TargetCursor 
@@ -102,6 +103,7 @@ const Hero = () => {
       </motion.div>
     </section>
     </div>
+    </>
   );
 };
 
