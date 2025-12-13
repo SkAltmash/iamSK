@@ -1,6 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-
+import {
+  SiJavascript,
+  SiTypescript,
+  SiReact,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiExpress,
+  SiFirebase,
+  SiMongodb,
+  SiGit,
+  SiGithub,
+  SiNetlify,
+  SiPostman,
+} from "react-icons/si";
 const clientProjects = [
   {
     slug: "pos-perfect-auto-parts",
@@ -17,6 +30,21 @@ const clientProjects = [
     readMore:
       "https://www.linkedin.com/posts/skaltamash18_reactjs-nodejs-firebase-activity-7403004146406088704-vYuR",
   },
+{
+  slug: "marco-teck",
+  title: "Marco Teck – Business Website",
+  image: "marco.png",
+  description:
+    "A modern, responsive business website built for Marco Teck Hyderabad to showcase services, brand identity, and contact details with smooth animations.",
+  impact: [
+    "Improved online presence for local business",
+    "Professional branding with fast-loading UI",
+  ],
+  technologies: ["React", "Tailwind CSS", "Framer Motion"],
+  status: "Delivered to Client",
+  live: "https://marcotech.netlify.app/",
+},
+
   {
     slug: "ecommerce-bdgc",
     title: "E-commerce Website – BDGC",
@@ -118,14 +146,64 @@ const certificates = [
 ];
 
 const techStack = [
-  { category: "Languages", items: ["C", "C++", "JavaScript", "TypeScript"] },
-  { category: "Frontend", items: ["React", "React Native", "Tailwind CSS", "Framer Motion"] },
-  { category: "Backend", items: ["Node.js", "Express", "Firebase", "MongoDB"] },
-  { category: "Tools", items: ["Git", "GitHub", "Netlify", "VS Code", "Postman", "Socket.IO"] },
+  {
+    category: "Frontend",
+    skills: [
+      { name: "React", level: 90, icon: <SiReact />, color: "#61DAFB" },
+      { name: "React Native", level: 80, icon: <SiReact />, color: "#61DAFB" },
+      { name: "Tailwind CSS", level: 90, icon: <SiTailwindcss />, color: "#06B6D4" },
+      { name: "JavaScript", level: 85, icon: <SiJavascript />, color: "#F7DF1E" },
+      { name: "TypeScript", level: 70, icon: <SiTypescript />, color: "#3178C6" },
+    ],
+  },
+  {
+    category: "Backend",
+    skills: [
+      { name: "Node.js", level: 85, icon: <SiNodedotjs />, color: "#339933" },
+      { name: "Express", level: 80, icon: <SiExpress />, color: "#fff" },
+      { name: "Firebase", level: 90, icon: <SiFirebase />, color: "#FFCA28" },
+      { name: "MongoDB", level: 75, icon: <SiMongodb />, color: "#47A248" },
+    ],
+  },
+  {
+    category: "Tools",
+    skills: [
+      { name: "Git", level: 85, icon: <SiGit />, color: "#F05032" },
+      { name: "GitHub", level: 85, icon: <SiGithub />, color: "#fff" },
+      { name: "Netlify", level: 80, icon: <SiNetlify />, color: "#00C46A" },
+      { name: "Postman", level: 75, icon: <SiPostman />, color: "#FF6C37" },
+    ],
+  },
 ];
+
+
 
 const Projects = () => {
   const [activeTab, setActiveTab] = useState("client");
+  const [skillFilter, setSkillFilter] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = (project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && isModalOpen) {
+        closeModal();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen]);
 
   const tabs = [
     { key: "client", label: "Client Projects" },
@@ -134,8 +212,40 @@ const Projects = () => {
     { key: "techstack", label: "Skills & Tools" },
   ];
 
+  const filteredClientProjects = clientProjects.filter(
+    (project) =>
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.technologies.some((tech) =>
+        tech.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+  );
+
+  const filteredPersonalProjects = personalProjects.filter(
+    (project) =>
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.technologies.some((tech) =>
+        tech.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+  );
+
+  const filteredCertificates = certificates.filter(
+    (cert) =>
+      cert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      cert.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredTechStack = techStack.map((section) => ({
+    ...section,
+    skills: section.skills.filter((skill) =>
+      skill.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ),
+  })).filter((section) => section.skills.length > 0);
+
   return (
     <section className="relative bg-black text-white min-h-screen py-16 px-6 mt-12">
+      {/* Search Bar */}
+     
+
       {/* Tabs */}
       <div className="flex mb-12 gap-6 overflow-auto md:justify-center">
         {tabs.map((tab) => (
@@ -156,13 +266,14 @@ const Projects = () => {
       {/* Client Projects */}
       {activeTab === "client" && (
         <div className="flex flex-wrap gap-10  justify-center">
-          {clientProjects.map((project, index) => (
+          {filteredClientProjects.map((project, index) => (
             <motion.div
               key={project.slug}
-              className="bg-[#111] w-full max-w-[500px] rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/40 hover:scale-[1.03] transition-all duration-300"
+              className="bg-[#111] w-full max-w-[500px] rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/40 hover:scale-[1.03] transition-all duration-300 cursor-pointer"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.15, duration: 0.6 }}
+              onClick={() => openModal(project)}
             >
               <div className="relative">
                 <img
@@ -231,16 +342,17 @@ const Projects = () => {
       {/* Personal Projects */}
       {activeTab === "projects" && (
         <div className="flex flex-wrap gap-10 justify-center">
-          {personalProjects.map((project, index) => {
+          {filteredPersonalProjects.map((project, index) => {
             const isApp = project.technologies.includes("React Native");
 
             return (
               <motion.div
                 key={project.slug}
-                className="bg-[#111] w-full max-w-[500px] rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/40 hover:scale-[1.03] transition-all duration-300"
+                className="bg-[#111] w-full max-w-[500px] rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/40 hover:scale-[1.03] transition-all duration-300 cursor-pointer"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.15, duration: 0.6 }}
+                onClick={() => openModal(project)}
               >
                 <div className="relative">
                   <img
@@ -304,7 +416,7 @@ const Projects = () => {
       {/* Certificates */}
       {activeTab === "certificates" && (
         <div className="flex flex-wrap gap-10 justify-center">
-          {certificates.map((cert, index) => (
+          {filteredCertificates.map((cert, index) => (
             <motion.div
               key={index}
               className="bg-[#111] w-full max-w-[400px] rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/40 hover:scale-[1.03] transition-all duration-300"
@@ -335,33 +447,192 @@ const Projects = () => {
       )}
 
       {/* Tech Stack */}
-      {activeTab === "techstack" && (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          {techStack.map((section, index) => (
-            <motion.div
-              key={index}
-              className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-2xl p-6 shadow-lg hover:shadow-cyan-500/50 hover:scale-[1.03] transition-all duration-300"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.15, duration: 0.6 }}
-            >
-              <h4 className="text-xl font-bold text-[#00ffff] mb-6 border-b border-cyan-500 pb-2">
-                {section.category}
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {section.items.map((item, i) => (
-                  <span
-                    key={i}
-                    className="px-3 py-1 rounded-lg bg-[#222] text-gray-300 text-sm font-medium hover:bg-cyan-500/20 hover:text-cyan-400 transition"
-                  >
-                    {item}
-                  </span>
-                ))}
+{activeTab === "techstack" && (
+  <div className="max-w-6xl mx-auto">
+
+    {/* Filters */}
+    <div className="flex gap-4 justify-center mb-10 flex-wrap">
+      {["All", "Frontend", "Backend", "Tools"].map((filter) => (
+        <button
+          key={filter}
+          onClick={() => setSkillFilter(filter)}
+          className={`px-5 py-2 rounded-full text-sm font-medium transition
+            ${
+              skillFilter === filter
+                ? "bg-cyan-400 text-black"
+                : "border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black"
+            }`}
+        >
+          {filter}
+        </button>
+      ))}
+    </div>
+
+    {/* Skills Grid */}
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {filteredTechStack
+        .filter(
+          (section) =>
+            skillFilter === "All" || section.category === skillFilter
+        )
+        .map((section, index) => (
+          <motion.div
+            key={index}
+            className="bg-gradient-to-br from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-6 shadow-lg hover:shadow-cyan-500/40 transition"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.15 }}
+          >
+            <h4 className="text-xl font-bold text-cyan-400 mb-6 border-b border-cyan-500/30 pb-2">
+              {section.category}
+            </h4>
+
+            <div className="space-y-5">
+              {section.skills.map((skill, i) => (
+                <div key={i}>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-3 text-gray-300">
+                      <span className="text-xl" style={{ color: skill.color }}>
+                        {skill.icon}
+                      </span>
+                      <span className="font-medium">{skill.name}</span>
+                    </div>
+
+                    {/* Animated Counter */}
+                    <motion.span
+                      className="text-sm text-gray-400"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      {skill.level}%
+                    </motion.span>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="w-full h-2 bg-[#222] rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-cyan-400 to-blue-500"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${skill.level}%` }}
+                      transition={{ duration: 0.8 }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+    </div>
+  </div>
+)}
+
+
+      {/* Project Modal */}
+      {isModalOpen && selectedProject && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <motion.div
+            className="bg-[#111] rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+          >
+            <div className="relative">
+              <img
+                src={selectedProject.image}
+                alt={selectedProject.title}
+                className="w-full h-64 object-cover rounded-t-2xl"
+              />
+              <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition"
+              >
+                ✕
+              </button>
+              {selectedProject.status && (
+                <span className="absolute top-4 left-4 px-3 py-1 text-xs font-bold uppercase rounded-full bg-green-400 text-black">
+                  {selectedProject.status}
+                </span>
+              )}
+            </div>
+
+            <div className="p-8">
+              <h2 className="text-3xl font-bold text-[#00ffff] mb-4">
+                {selectedProject.title}
+              </h2>
+              <p className="text-gray-300 mb-6">{selectedProject.description}</p>
+
+              {selectedProject.impact && (
+                <div className="mb-6">
+                  <h3 className="text-xl font-semibold text-white mb-2">Business Impact</h3>
+                  <ul className="list-disc pl-5 text-gray-400">
+                    {selectedProject.impact.map((point, i) => (
+                      <li key={i}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold text-white mb-2">Technologies Used</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.technologies.map((tech, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 bg-[#222] rounded-lg text-gray-300"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </motion.div>
-          ))}
+
+              <div className="flex gap-4">
+                {selectedProject.live && (
+                  <a
+                    href={selectedProject.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 bg-[#00ffff] text-black rounded-lg hover:bg-cyan-400 transition"
+                  >
+                    View Live
+                  </a>
+                )}
+                {selectedProject.link && (
+                  <a
+                    href={selectedProject.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 bg-[#00ffff] text-black rounded-lg hover:bg-cyan-400 transition"
+                  >
+                    View Live
+                  </a>
+                )}
+                {selectedProject.github && (
+                  <a
+                    href={selectedProject.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 border border-[#00ffff] text-[#00ffff] rounded-lg hover:bg-[#00ffff] hover:text-black transition"
+                  >
+                    GitHub
+                  </a>
+                )}
+                {selectedProject.readMore && (
+                  <a
+                    href={selectedProject.readMore}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 border border-[#00ffff] text-[#00ffff] rounded-lg hover:bg-[#00ffff] hover:text-black transition"
+                  >
+                    Read More
+                  </a>
+                )}
+              </div>
+            </div>
+          </motion.div>
         </div>
       )}
+
     </section>
   );
 };

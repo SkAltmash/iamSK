@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import Squares from "./Squares";
 import RotatingText from "./RotatingText";
 import TargetCursor from "./TargetCursor";
@@ -83,22 +84,18 @@ const Hero = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.6 }}
         >
-          <motion.a
-            href="/projects"
+          <Link
+            to="/projects"
             className="cursor-target px-5 py-2 border border-[#00ffff] rounded-lg text-black bg-[#00ffff] hover:text-black transition"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
           >
             View Work
-          </motion.a>
-          <motion.a
-            href="/contact"
+          </Link>
+          <Link
+            to="/contact"
             className="cursor-target px-5 py-2 border border-[#00ffff] rounded-lg text-[#00ffff] hover:bg-[#00ffff] hover:text-black transition"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
           >
             Contact Me
-          </motion.a>
+          </Link>
         </motion.div>
       </motion.div>
     </section>
