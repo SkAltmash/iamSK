@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Squares from "./Squares";
 import RotatingText from "./RotatingText";
 import TargetCursor from "./TargetCursor";
+import LiquidEther from './LiquidEther';
+
 const Hero = () => {
   return (
     <>
@@ -16,13 +18,23 @@ const Hero = () => {
     <section className="relative w-full h-screen flex justify-center items-center bg-black overflow-hidden text-white">
       {/* Background Animation */}
       <div className="absolute inset-0 z-0">
-        <Squares
-          speed={1}
-          squareSize={80}
-          direction="diagonal"
-          borderColor="#ffffff"
-          hoverFillColor="#00ffff"
-        />
+         <LiquidEther
+colors={['#22D3EE', '#67E8F9', '#A5F3FC']}
+    mouseForce={20}
+    cursorSize={100}
+    isViscous={false}
+    viscous={30}
+    iterationsViscous={32}
+    iterationsPoisson={32}
+    resolution={0.5}
+    isBounce={true}
+    autoDemo={true}
+    autoSpeed={0.5}
+    autoIntensity={2.2}
+    takeoverDuration={0.25}
+    autoResumeDelay={3000}
+    autoRampDuration={0.6}
+  />
       </div>
 
       {/* Hero Content */}
