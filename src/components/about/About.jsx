@@ -182,7 +182,7 @@ const About = () => {
   };
 
   return (
-    <section className="relative w-full mt-25 pt-5 min-h-screen bg-black text-white flex justify-center items-center px-4 overflow-hidden">
+    <section className="relative w-full mt-20 pt-5 min-h-screen bg-black text-white flex justify-center items-center px-4 overflow-hidden">
       <FloatingParticles />
 
       <div className="max-w-[700px] w-full text-center relative z-10">
