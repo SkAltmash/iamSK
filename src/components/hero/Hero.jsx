@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Squares from "./Squares";
 import RotatingText from "./RotatingText";
-import TargetCursor from "./TargetCursor";
 import LiquidEther from './LiquidEther';
 
 const Hero = () => {
@@ -11,10 +10,7 @@ const Hero = () => {
     <>
     <div>
     
-      <TargetCursor 
-        spinDuration={2}
-        hideDefaultCursor={true}
-      />
+    
     <section className="relative w-full h-screen flex justify-center items-center bg-black overflow-hidden text-white">
       {/* Background Animation */}
       <div className="absolute inset-0 z-0">
@@ -66,7 +62,7 @@ colors={['#22D3EE', '#67E8F9', '#A5F3FC']}
           </span>
           <RotatingText
             texts={["Coding", "Thinking", "Crafting", "Designing"]}
-            mainClassName="px-3 py-1 bg-cyan-300 text-black rounded-lg cursor-target "
+            mainClassName="px-3 py-1 bg-cyan-300 text-black rounded-lg "
             staggerFrom="last"
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
@@ -98,13 +94,13 @@ colors={['#22D3EE', '#67E8F9', '#A5F3FC']}
         >
           <Link
             to="/projects"
-            className="cursor-target px-5 py-2 border border-[#00ffff] rounded-lg text-black bg-[#00ffff] hover:text-black transition"
+            className="px-5 py-2 border border-[#00ffff] rounded-lg text-black bg-[#00ffff] hover:text-black transition"
           >
             View Work
           </Link>
           <Link
             to="/contact"
-            className="cursor-target px-5 py-2 border border-[#00ffff] rounded-lg text-[#00ffff] hover:bg-[#00ffff] hover:text-black transition"
+            className=" px-5 py-2 border border-[#00ffff] rounded-lg text-[#00ffff] hover:bg-[#00ffff] hover:text-black transition"
           >
             Contact Me
           </Link>
