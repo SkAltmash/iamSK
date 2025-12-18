@@ -23,10 +23,12 @@ const Certificates = () => {
       {certificates.map((cert, index) => (
         <motion.div
           key={index}
-          className="bg-[#111] w-full max-w-[400px] rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/40 hover:scale-[1.03] transition-all duration-300"
+          className="bg-[#111] w-full max-w-[400px] rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/40 transition-all duration-300"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.15, duration: 0.6 }}
+          whileHover={{ y: -6 }}
+          whileHoverTransition={{ type: "spring", stiffness: 200 }}
         >
           <div className="relative">
             <img

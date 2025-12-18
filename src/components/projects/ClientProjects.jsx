@@ -1,65 +1,108 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* ---------- Skeleton ---------- */
 const VideoSkeleton = () => (
   <div className="absolute inset-0 bg-[#222] animate-pulse flex items-center justify-center">
-    <span className="text-gray-500 text-sm">Loading…</span>
+    <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
   </div>
 );
 
 const ClientProjects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
-  const projects = [
-    {
-      slug: "pos-perfect-auto-parts",
-      title: "Sales & Inventory Management System (POS)",
-      image: "PerfectAutoParts.png",
-      description: "A full POS system built for a live auto-parts business — includes real billing workflow, retailer management, inventory tracking, and statements panel.",
-      impact: [
-        "60% faster billing & cashflow tracking",
-        "Used daily in real business operations",
-      ],
-      technologies: ["React", "Node.js", "Firebase", "Tailwind CSS", "Charts"],
-      status: "Delivered to Client",
-      youtube :"https://youtu.be/vFygI_2ArP4?si=oX3CnYCiv0WfxVre",
-      readMore: "https://www.linkedin.com/posts/skaltamash18_reactjs-nodejs-firebase-activity-7403004146406088704-vYuR",
-    }, 
-    {
-     slug: "marco-teck", 
-     title: "Marco Teck – Business Website", 
-     image: "marco.png", 
-     description: "A modern, responsive business website built for Marco Teck Hyderabad to showcase services, brand identity, and contact details with smooth animations.", 
-     impact: ["Improved online presence for local business", "Professional branding with fast-loading UI",], 
-     technologies: ["React", "Tailwind CSS", "Framer Motion"], 
-     status: "Delivered to Client", 
-     live: "https://marcotech.netlify.app/", 
-     youtube: "https://www.youtube.com/embed/3fcvd1ldcy0",
-     }, 
-     {
-       slug: "ecommerce-bdgc", 
-       title: "E-commerce Website – BDGC", 
-       image: "bgdc.png", 
-       description: "Shopping platform for Baby Care products with cart, secure checkout and inventory sync with admin panel.", 
-       impact: ["Online orders enabled for local customers", "Redy Integrated online payments (UPI/Card)",],
-        technologies: ["React", "Node.js", "Firebase", "Tailwind CSS"], 
-        status: "Delivered to Client", 
-        live: "https://baby-daiper-and-genral-care.netlify.app/", 
-        youtube: "https://www.youtube.com/watch?v=vFygI_2ArP4&t=3s", 
-      },
-       { 
-        slug: "admin-app-bdgc",
-         title: "Admin Application – BDGC",
-          image: "BDGCAdmin.png", 
-          description: "Admin app to manage products, orders, retailers and analytics — fully connected with backend.", 
-          impact: ["Reduced manual workload by 50%", "Full control — mobile-friendly operations",], 
-          technologies: ["React Native", "Node.js", "Firebase", "Telegram Bot"], 
-          status: "Delivered to Client",
-          youtube:"https://www.youtube.com/shorts?v=3JwjiZbYrmk",
-           readMore: "https://www.linkedin.com/posts/skaltamash18_react-reactnative-expo-activity-7399686177215324160-ycsd", }
-           ,];
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape" && selectedProject) {
+        setSelectedProject(null);
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [selectedProject]);
+
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedProject]);
+
+ const projects = [
+  {
+    slug: "pos-perfect-auto-parts",
+    title: "Sales & Inventory Management System (POS)",
+    image: "PerfectAutoParts.png",
+    description:
+      "A full POS system built for a live auto-parts business — includes real billing workflow, retailer management, inventory tracking, and statements panel.",
+    impact: [
+      "60% faster billing & cashflow tracking",
+      "Used daily in real business operations",
+    ],
+    technologies: ["React", "Node.js", "Firebase", "Tailwind CSS", "Charts"],
+    status: "Delivered to Client",
+    youtube: "https://www.youtube.com/embed/vFygI_2ArP4?start=3",
+    readMore:
+      "https://www.linkedin.com/posts/skaltamash18_reactjs-nodejs-firebase-activity-7403004146406088704-vYuR",
+  },
+
+  {
+    slug: "marco-teck",
+    title: "Marco Teck – Business Website",
+    image: "marco.png",
+    description:
+      "A modern, responsive business website built for Marco Teck Hyderabad to showcase services, brand identity, and contact details with smooth animations.",
+    impact: [
+      "Improved online presence for local business",
+      "Professional branding with fast-loading UI",
+    ],
+    technologies: ["React", "Tailwind CSS", "Framer Motion"],
+    status: "Delivered to Client",
+    live: "https://marcotech.netlify.app/",
+    youtube: "https://www.youtube.com/embed/3fcvd1ldcy0",
+  },
+
+  {
+    slug: "ecommerce-bdgc",
+    title: "E-commerce Website – BDGC",
+    image: "bgdc.png",
+    description:
+      "Shopping platform for Baby Care products with cart, secure checkout and inventory sync with admin panel.",
+    impact: [
+      "Online orders enabled for local customers",
+      "Ready integrated online payments (UPI / Card)",
+    ],
+    technologies: ["React", "Node.js", "Firebase", "Tailwind CSS"],
+    status: "Delivered to Client",
+    live: "https://baby-daiper-and-genral-care.netlify.app/",
+    youtube: "https://www.youtube.com/embed/vFygI_2ArP4?start=3",
+  },
+
+  {
+    slug: "admin-app-bdgc",
+    title: "Admin Application – BDGC",
+    image: "BDGCAdmin.png",
+    description:
+      "Admin app to manage products, orders, retailers and analytics — fully connected with backend.",
+    impact: [
+      "Reduced manual workload by 50%",
+      "Full control — mobile-friendly operations",
+    ],
+    technologies: ["React Native", "Node.js", "Firebase", "Telegram Bot"],
+    status: "Delivered to Client",
+    youtube: "https://www.youtube.com/embed/3JwjiZbYrmk",
+    readMore:
+      "https://www.linkedin.com/posts/skaltamash18_react-reactnative-expo-activity-7399686177215324160-ycsd",
+  },
+];
+
+
 
   return (
     <>
@@ -71,12 +114,24 @@ const ClientProjects = () => {
             onClick={() => {
               setSelectedProject(project);
               setVideoLoaded(false);
+              setVideoError(false);
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setSelectedProject(project);
+                setVideoLoaded(false);
+                setVideoError(false);
+              }
+            }}
+            role="button"
+            tabIndex={0}
             className="bg-[#111] w-full max-w-[480px] rounded-2xl overflow-hidden shadow-lg 
-                       hover:shadow-cyan-500/30 hover:scale-[1.03] transition cursor-pointer"
+                       hover:shadow-cyan-500/30 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.15 }}
+            whileHover={{ y: -6 }}
+            whileHoverTransition={{ type: "spring", stiffness: 200 }}
           >
             <div className="relative aspect-[16/9] overflow-hidden">
               <img
@@ -88,6 +143,7 @@ const ClientProjects = () => {
               <span className="absolute top-3 left-3 px-3 py-1 text-[10px] font-bold rounded-full bg-green-400 text-black">
                 {project.status}
               </span>
+            
             </div>
 
             <div className="p-5">
@@ -166,16 +222,27 @@ const ClientProjects = () => {
               >
                 {selectedProject.youtube ? (
                   <>
-                    {!videoLoaded && <VideoSkeleton />}
-                    <iframe
-                      src={`${selectedProject.youtube}?autoplay=1`}
-                      title="Project Demo"
-                      onLoad={() => setVideoLoaded(true)}
-                      className={`absolute inset-0 w-full h-full transition-opacity ${videoLoaded ? "opacity-100" : "opacity-0"
-                        }`}
-                      allow="autoplay; encrypted-media"
-                      allowFullScreen
-                    />
+                    {!videoLoaded && !videoError && <VideoSkeleton />}
+                    {!videoError ? (
+                      <iframe
+                        src={selectedProject.youtube.includes("?")
+                          ? `${selectedProject.youtube}&autoplay=1`
+                          : `${selectedProject.youtube}?autoplay=1`}
+                        title="Project Demo"
+                        onLoad={() => setVideoLoaded(true)}
+                        onError={() => setVideoError(true)}
+                        className={`absolute inset-0 w-full h-full transition-opacity ${videoLoaded ? "opacity-100" : "opacity-0"
+                          }`}
+                        allow="autoplay; encrypted-media"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <img
+                        src={selectedProject.image}
+                        alt={selectedProject.title}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </>
                 ) : (
                   <img
