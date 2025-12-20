@@ -47,7 +47,7 @@ const ClientProjects = () => {
     ],
     technologies: ["React", "Node.js", "Firebase", "Tailwind CSS", "Charts"],
     status: "Delivered to Client",
-    youtube: "https://www.youtube.com/embed/vFygI_2ArP4?start=3",
+    youtube: "https://www.youtube.com/embed/vFygI_2ArP4",
     readMore:
       "https://www.linkedin.com/posts/skaltamash18_reactjs-nodejs-firebase-activity-7403004146406088704-vYuR",
   },
@@ -81,7 +81,7 @@ const ClientProjects = () => {
     technologies: ["React", "Node.js", "Firebase", "Tailwind CSS"],
     status: "Delivered to Client",
     live: "https://baby-daiper-and-genral-care.netlify.app/",
-    youtube: "https://www.youtube.com/embed/vFygI_2ArP4?start=3",
+    youtube: "https://www.youtube.com/embed/z02s8ORQyv4",
   },
 
   {
