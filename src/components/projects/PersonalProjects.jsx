@@ -1,28 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-/* ---------- Skeleton ---------- */
-const VideoSkeleton = () => (
-  <div className="absolute inset-0 bg-[#222] animate-pulse flex items-center justify-center">
-    <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
-  </div>
-);
+import { FaGithub, FaExternalLinkAlt, FaPlay, FaTimes, FaMobileAlt, FaGlobe } from "react-icons/fa";
 
 const PersonalProjects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape" && selectedProject) {
-        setSelectedProject(null);
-      }
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [selectedProject]);
-
+  // 🔹 Lock Body Scroll when Modal is Open
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = "hidden";
@@ -34,10 +19,19 @@ const PersonalProjects = () => {
     };
   }, [selectedProject]);
 
+  // 🔹 Close on Escape Key
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape" && selectedProject) setSelectedProject(null);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [selectedProject]);
+
   const projects = [
-  {
+    {
       slug: "zap-split",
-      title: "ZapSplit – Bill Split & Wallet System",
+      title: "ZapSplit",
       image: "ZapSplit.jpg",
       description:
         "Top-up wallet, split bills, pay later, rewards — smart money management for groups.",
@@ -45,11 +39,10 @@ const PersonalProjects = () => {
       github: "https://github.com/SkAltmash/ZapSplit",
       technologies: ["React", "Tailwind CSS", "Firebase"],
       youtube: "https://www.youtube.com/embed/umVu3wLG3xQ",
-      
     },
     {
       slug: "trendora-ecommerce",
-      title: "Trendora E-commerce",
+      title: "Trendora",
       image: "trendora.png",
       description:
         "Modern online shopping app with admin management, discounts & secure auth.",
@@ -60,7 +53,7 @@ const PersonalProjects = () => {
     },
     {
       slug: "flickstream-v2",
-      title: "FlickStream V2 – Movie Streaming",
+      title: "FlickStream V2",
       image: "flickstreamV2.png",
       description:
         "TMDB powered streaming UI with watchlist & Firebase based chat.",
@@ -71,181 +64,219 @@ const PersonalProjects = () => {
     },
     {
       slug: "flickstream-v1",
-      title: "FlickStream V1 – Movie Explorer",
+      title: "FlickStream V1",
       image: "flickstreamV1.png",
-      description:
-        "Lightweight movie search app powered by TMDB API.",
+      description: "Lightweight movie search app powered by TMDB API.",
       link: "https://asflickstream.netlify.app/",
       github: "https://github.com/SkAltmash/flickstreembysk",
       technologies: ["HTML", "CSS", "JavaScript"],
     },
   ];
+
   return (
     <>
-      {/* PROJECT CARDS */}
-      <div className="flex flex-wrap gap-10 justify-center">
+      {/* 🔹 PROJECT GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 justify-items-center">
         {projects.map((project, index) => {
           const isApp = project.technologies.includes("React Native");
 
           return (
             <motion.div
               key={project.slug}
+              layoutId={`card-${project.slug}`}
               onClick={() => {
                 setSelectedProject(project);
                 setVideoLoaded(false);
                 setVideoError(false);
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  setSelectedProject(project);
-                  setVideoLoaded(false);
-                  setVideoError(false);
-                }
-              }}
-              role="button"
-              tabIndex={0}
-              className="bg-[#111] w-full max-w-[500px] rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/40 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400"
-              initial={{ opacity: 0, y: 50 }}
+              className="group relative w-full max-w-[500px] bg-[#0a0a0a] rounded-2xl border border-white/10 overflow-hidden cursor-pointer
+                         hover:border-cyan-400/50 transition-all duration-500 shadow-xl"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.15, duration: 0.6 }}
-              whileHover={{ y: -6 }}
-              whileHoverTransition={{ type: "spring", stiffness: 200 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ y: -5 }}
             >
-              <div className="relative">
-                <img
+              {/* Image Section */}
+              <div className="relative aspect-[16/9] overflow-hidden">
+                <motion.img
+                  layoutId={`img-${project.slug}`}
                   src={project.image}
                   alt={project.title}
-                  loading="lazy"
-                  className="w-full h-45 sm:h-60 md:h-72 object-cover"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
+                
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60" />
+
+                {/* Floating Badge */}
                 <span
-                  className={`absolute bottom-3 right-3 px-3 py-[3px] text-[10px] font-bold uppercase rounded-full ${
-                    isApp ? "bg-green-500 text-black" : "bg-blue-500"
-                  }`}
+                  className={`absolute top-3 right-3 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-black rounded shadow-[0_0_10px_rgba(0,0,0,0.5)] 
+                  ${isApp ? "bg-green-400 shadow-green-400/40" : "bg-cyan-400 shadow-cyan-400/40"}`}
                 >
-                  {isApp ? "App" : "Website"}
+                  {isApp ? "App" : "Web"}
                 </span>
               </div>
 
-              <div className="p-5">
-                <h3 className="text-2xl font-semibold text-[#00ffff] mb-2">
+              {/* Card Body */}
+              <div className="p-5 relative z-10">
+                <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
                   {project.title}
                 </h3>
-                <p className="text-gray-400 text-sm">{project.description}</p>
+                <p className="text-gray-400 text-sm mt-2 line-clamp-2">
+                  {project.description}
+                </p>
 
-                <div className="flex flex-wrap gap-2 mt-4 mb-4">
-                  {project.technologies.map((tech, i) => (
+                {/* Tech Stack Preview */}
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {project.technologies.slice(0, 3).map((tech, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1 text-xs bg-[#222] rounded-lg text-gray-300 hover:bg-cyan-500/20 hover:text-cyan-400 transition"
+                      className="px-2 py-1 text-[10px] uppercase font-medium text-gray-300 bg-white/5 border border-white/5 rounded"
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
-
-               
               </div>
+
+              {/* Glow Effect */}
+              <div className="absolute inset-0 rounded-2xl transition-opacity duration-500 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[inset_0_0_40px_rgba(34,211,238,0.1)]" />
             </motion.div>
           );
         })}
       </div>
 
-      {/* MODAL */}
+      {/* 🔹 CINEMATIC MODAL */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div
-            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[60] flex items-center justify-center px-4 bg-black/90 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
-              className="bg-[#111] rounded-2xl max-w-4xl w-full max-h-[92vh] md:max-h-[80vh] overflow-hidden"
-              initial={{ scale: 0.92 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.92 }}
+              layoutId={`card-${selectedProject.slug}`}
+              className="w-full max-w-5xl bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col md:max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* HEADER */}
-              <div className="flex justify-between items-center p-4 border-b border-white/10">
-                <h2 className="text-xl font-bold text-[#00ffff]">
+              {/* Header */}
+              <div className="flex justify-between items-center p-5 border-b border-white/10 bg-[#161616]">
+                <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
                   {selectedProject.title}
+                  {selectedProject.technologies.includes("React Native") ? (
+                    <FaMobileAlt className="text-green-400 text-lg" />
+                  ) : (
+                    <FaGlobe className="text-cyan-400 text-lg" />
+                  )}
                 </h2>
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="text-white text-xl hover:text-cyan-400"
+                  className="p-2 rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-400 transition-colors"
                 >
-                  ✕
+                  <FaTimes />
                 </button>
               </div>
 
-              {/* VIDEO OR IMAGE */}
-              <div
-                className="relative bg-black aspect-[16/9] md:aspect-auto md:h-[320px]"
-              >
-                {selectedProject.youtube ? (
-                  <>
-                    {!videoLoaded && !videoError && <VideoSkeleton />}
-                    {!videoError ? (
-                      <iframe
-                        src={selectedProject.youtube.includes("?")
-                          ? `${selectedProject.youtube}&autoplay=1`
-                          : `${selectedProject.youtube}?autoplay=1`}
-                        title="Project Demo"
-                        onLoad={() => setVideoLoaded(true)}
-                        onError={() => setVideoError(true)}
-                        className={`absolute inset-0 w-full h-full transition-opacity ${videoLoaded ? "opacity-100" : "opacity-0"
-                          }`}
-                        allow="autoplay; encrypted-media"
-                        allowFullScreen
-                      />
-                    ) : (
-                      <img
-                        src={selectedProject.image}
-                        alt={selectedProject.title}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                  </>
-                ) : (
-                  <img
-                    src={selectedProject.image}
-                    alt={selectedProject.title}
-                    className="w-full h-full object-cover"
-                  />
-                )}
-              </div>
-
-              {/* CONTENT */}
-              <div className="p-6 overflow-y-auto md:max-h-[calc(80vh-320px)]">
-                <p className="text-gray-300 mb-4">
-                  {selectedProject.description}
-                </p>
-
-             
-
-                {/* LINKS */}
-                <div className="flex gap-3 flex-wrap">
-                  {selectedProject.link && (
-                    <a
-                      href={selectedProject.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 bg-[#00ffff] text-black rounded-lg hover:bg-cyan-400"
-                    >
-                      Live
-                    </a>
+              {/* Scrollable Content */}
+              <div className="overflow-y-auto custom-scrollbar">
+                
+                {/* Media Area */}
+                <div className="w-full bg-black aspect-[16/9] relative group">
+                  {selectedProject.youtube ? (
+                    <>
+                      {!videoLoaded && !videoError && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-[#1a1a1a]">
+                           <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+                        </div>
+                      )}
+                      {!videoError ? (
+                        <iframe
+                          src={selectedProject.youtube.includes("?")
+                            ? `${selectedProject.youtube}&autoplay=1`
+                            : `${selectedProject.youtube}?autoplay=1`}
+                          title="Project Demo"
+                          onLoad={() => setVideoLoaded(true)}
+                          onError={() => setVideoError(true)}
+                          className={`w-full h-full transition-opacity duration-500 ${videoLoaded ? "opacity-100" : "opacity-0"}`}
+                          allow="autoplay; encrypted-media"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <img
+                          src={selectedProject.image}
+                          alt={selectedProject.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <motion.img
+                      layoutId={`img-${selectedProject.slug}`}
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      className="w-full h-full object-cover"
+                    />
                   )}
-                  <a
-                    href={selectedProject.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 border border-[#00ffff] text-[#00ffff] rounded-lg hover:bg-[#00ffff] hover:text-black"
-                  >
-                    GitHub
-                  </a>
+                </div>
+
+                {/* Dashboard Layout */}
+                <div className="grid md:grid-cols-3 gap-8 p-8">
+                  
+                  {/* Left: Description & Actions */}
+                  <div className="md:col-span-2 space-y-6">
+                    <div>
+                      <h3 className="text-lg font-semibold text-cyan-400 mb-2">About Project</h3>
+                      <p className="text-gray-300 leading-relaxed text-sm md:text-base">
+                        {selectedProject.description}
+                      </p>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex flex-wrap gap-4 pt-4">
+                      {selectedProject.link && (
+                        <a
+                          href={selectedProject.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-6 py-3 bg-cyan-400 text-black font-bold rounded-lg hover:bg-cyan-300 transition-transform active:scale-95"
+                        >
+                          <FaExternalLinkAlt size={14} /> Live Demo
+                        </a>
+                      )}
+                      {selectedProject.github && (
+                        <a
+                          href={selectedProject.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white font-medium rounded-lg hover:bg-white/10 hover:border-white/40 transition-colors"
+                        >
+                          <FaGithub size={16} /> Source Code
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right: Tech Stack */}
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">
+                        Technologies
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProject.technologies.map((tech, i) => (
+                          <span
+                            key={i}
+                            className="px-3 py-1.5 text-xs font-medium text-cyan-100 bg-cyan-900/30 border border-cyan-500/20 rounded-md"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </motion.div>

@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-/* ---------- Skeleton ---------- */
-const VideoSkeleton = () => (
-  <div className="absolute inset-0 bg-[#222] animate-pulse flex items-center justify-center">
-    <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
-  </div>
-);
+import { FaExternalLinkAlt, FaBookOpen, FaPlay, FaTimes } from "react-icons/fa";
 
 const ClientProjects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
@@ -36,9 +30,24 @@ const ClientProjects = () => {
 
  const projects = [
   {
+    slug: "Sales-Tracking-App",
+    title: "Sales Tracking + Invoice Application",
+    image: "smsAdmin.png",
+    description: "Sales Management System for a retail business to track sales, manage inventory, and generate invoices with ease.",
+    impact: [
+      "Streamlined sales tracking and inventory management",
+      "Automated invoice generation saving time and reducing errors",
+    ],
+    technologies: ["React Native", "Firebase", "Expo", "Expo-Share",  "Tailwind CSS"],
+    status: "Delivered to Client",
+  
+
+  }
+  ,
+  {
     slug: "Smart-Fix-Services",
     title: "Smart Fix Services Website",
-    image: "smartfix.png",
+    image: "sms.png",
     description:
       "A sleek, modern website for Smart Fix Services, a tech repair business in hinganghat, showcasing services, pricing, and contact info with smooth animations.",
     impact: [
@@ -47,8 +56,7 @@ const ClientProjects = () => {
     ],
     technologies: ["React", "Next.js", "Firebase" , "Tailwind CSS", "Framer Motion"],
     status: "Delivered to Client",
-    live: "https://smartfixservices.in/",
-    youtube: "https://www.youtube.com/embed/3fcvd1ldcy0",
+    live: "https://smartfixservices.help",
     
   },
   {
@@ -119,185 +127,227 @@ const ClientProjects = () => {
 
 
 
+
+
   return (
     <>
-      {/* PROJECT CARDS */}
-      <div className="flex flex-wrap gap-10 justify-center">
+      {/* 🔹 PROJECT GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
         {projects.map((project, index) => (
           <motion.div
             key={project.slug}
+            layoutId={`card-${project.slug}`}
             onClick={() => {
               setSelectedProject(project);
               setVideoLoaded(false);
               setVideoError(false);
             }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setSelectedProject(project);
-                setVideoLoaded(false);
-                setVideoError(false);
-              }
-            }}
-            role="button"
-            tabIndex={0}
-            className="bg-[#111] w-full max-w-[480px] rounded-2xl overflow-hidden shadow-lg 
-                       hover:shadow-cyan-500/30 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400"
-            initial={{ opacity: 0, y: 40 }}
+            className="group relative bg-[#0a0a0a] rounded-2xl border border-white/10 overflow-hidden cursor-pointer
+                       hover:border-cyan-400/50 transition-colors duration-500"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.15 }}
-            whileHover={{ y: -6 }}
-            whileHoverTransition={{ type: "spring", stiffness: 200 }}
+            transition={{ delay: index * 0.1 }}
+            whileHover={{ y: -5 }}
           >
+            {/* Image Section (Fixed Aspect Ratio) */}
             <div className="relative aspect-[16/9] overflow-hidden">
-              <img
+              <motion.img
+                layoutId={`img-${project.slug}`}
                 src={project.image}
                 alt={project.title}
-                loading="lazy"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
-              <span className="absolute top-3 left-3 px-3 py-1 text-[10px] font-bold rounded-full bg-green-400 text-black">
+              
+              {/* Overlay Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60" />
+
+              {/* Floating Badge */}
+              <span className="absolute top-3 right-3 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-black bg-cyan-400 rounded shadow-[0_0_10px_rgba(34,211,238,0.6)]">
                 {project.status}
               </span>
-            
             </div>
 
-            <div className="p-5">
-              <h3 className="text-lg font-semibold text-[#00ffff]">
+            {/* Card Body */}
+            <div className="p-5 relative z-10">
+              <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
                 {project.title}
               </h3>
-              <p className="text-gray-400 text-sm mt-2 line-clamp-3">
+              <p className="text-gray-400 text-sm mt-2 line-clamp-2">
                 {project.description}
               </p>
 
-              {/* IMPACT */}
-              {project.impact && (
-                <div className="mb-6">
-                  <h4 className="text-white font-semibold mb-2">
-                    Business Impact
-                  </h4>
-                  <ul className="list-disc pl-5 text-gray-400 text-sm space-y-1">
-                    {project.impact.map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* TECHNOLOGIES */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {project.technologies.map((tech, i) => (
+              {/* Mini Tech Tags (Limit to 3) */}
+              <div className="flex flex-wrap gap-2 mt-4">
+                {project.technologies.slice(0, 3).map((tech, i) => (
                   <span
                     key={i}
-                    className="px-3 py-1 text-xs bg-[#222] rounded-lg text-gray-300"
+                    className="px-2 py-1 text-[10px] uppercase font-medium text-gray-300 bg-white/5 border border-white/5 rounded"
                   >
                     {tech}
                   </span>
                 ))}
+                {project.technologies.length > 3 && (
+                  <span className="px-2 py-1 text-[10px] text-gray-500">
+                    +{project.technologies.length - 3}
+                  </span>
+                )}
               </div>
             </div>
 
-
+            {/* Glow Effect on Hover */}
+            <div className="absolute inset-0 rounded-2xl transition-opacity duration-500 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[inset_0_0_40px_rgba(34,211,238,0.1)]" />
           </motion.div>
         ))}
       </div>
 
-      {/* MODAL */}
+      {/* 🔹 CINEMATIC MODAL */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div
-            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[60] flex items-center justify-center px-4 bg-black/90 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
-              className="bg-[#111] rounded-2xl max-w-4xl w-full max-h-[92vh] md:max-h-[80vh] overflow-hidden"
-              initial={{ scale: 0.92 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.92 }}
+              layoutId={`card-${selectedProject.slug}`}
+              className="w-full max-w-5xl bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col md:max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* HEADER */}
-              <div className="flex justify-between items-center p-4 border-b border-white/10">
-                <h2 className="text-xl font-bold text-[#00ffff]">
+              {/* Header with Close Button */}
+              <div className="flex justify-between items-center p-5 border-b border-white/10 bg-[#161616]">
+                <h2 className="text-2xl font-bold text-white tracking-tight">
                   {selectedProject.title}
+                  <span className="ml-3 text-sm font-normal text-gray-500 border border-white/10 px-2 py-0.5 rounded-full">
+                    {selectedProject.status}
+                  </span>
                 </h2>
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="text-white text-xl hover:text-cyan-400"
+                  className="p-2 rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-400 transition-colors"
                 >
-                  ✕
+                  <FaTimes />
                 </button>
               </div>
 
-              {/* VIDEO OR IMAGE */}
-              <div
-                className="relative bg-black aspect-[16/9] md:aspect-auto md:h-[320px]"
-              >
-                {selectedProject.youtube ? (
-                  <>
-                    {!videoLoaded && !videoError && <VideoSkeleton />}
-                    {!videoError ? (
-                      <iframe
-                        src={selectedProject.youtube.includes("?")
-                          ? `${selectedProject.youtube}&autoplay=1`
-                          : `${selectedProject.youtube}?autoplay=1`}
-                        title="Project Demo"
-                        onLoad={() => setVideoLoaded(true)}
-                        onError={() => setVideoError(true)}
-                        className={`absolute inset-0 w-full h-full transition-opacity ${videoLoaded ? "opacity-100" : "opacity-0"
-                          }`}
-                        allow="autoplay; encrypted-media"
-                        allowFullScreen
-                      />
-                    ) : (
-                      <img
-                        src={selectedProject.image}
-                        alt={selectedProject.title}
-                        className="w-full h-full object-cover"
-                      />
+              {/* Scrollable Content Area */}
+              <div className="overflow-y-auto custom-scrollbar">
+                
+                {/* Media Section (Video/Image) */}
+                <div className="w-full bg-black aspect-[16/9] relative group">
+                   {selectedProject.youtube ? (
+                    <>
+                      {!videoLoaded && !videoError && (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-500 bg-[#1a1a1a]">
+                           <span className="animate-pulse">Loading Demo...</span>
+                        </div>
+                      )}
+                      {!videoError ? (
+                        <iframe
+                          src={selectedProject.youtube.includes("?")
+                            ? `${selectedProject.youtube}&autoplay=1`
+                            : `${selectedProject.youtube}?autoplay=1`}
+                          title="Project Demo"
+                          onLoad={() => setVideoLoaded(true)}
+                          onError={() => setVideoError(true)}
+                          className={`w-full h-full transition-opacity duration-500 ${videoLoaded ? "opacity-100" : "opacity-0"}`}
+                          allow="autoplay; encrypted-media"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <img
+                          src={selectedProject.image}
+                          alt={selectedProject.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <motion.img
+                      layoutId={`img-${selectedProject.slug}`}
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+
+                {/* Grid Content Layout */}
+                <div className="grid md:grid-cols-3 gap-8 p-8">
+                  
+                  {/* Left Column: Description & Actions (Span 2) */}
+                  <div className="md:col-span-2 space-y-6">
+                    <div>
+                      <h3 className="text-lg font-semibold text-cyan-400 mb-2">Overview</h3>
+                      <p className="text-gray-300 leading-relaxed text-sm md:text-base">
+                        {selectedProject.description}
+                      </p>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-wrap gap-4 pt-4">
+                      {selectedProject.live && (
+                        <a
+                          href={selectedProject.live}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-6 py-3 bg-cyan-400 text-black font-bold rounded-lg hover:bg-cyan-300 transition-transform active:scale-95"
+                        >
+                          <FaPlay size={12} /> Live Demo
+                        </a>
+                      )}
+                      {selectedProject.readMore && (
+                        <a
+                          href={selectedProject.readMore}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white font-medium rounded-lg hover:bg-white/10 transition-colors"
+                        >
+                          <FaBookOpen size={14} /> Case Study
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Tech & Impact (Span 1) */}
+                  <div className="space-y-8">
+                    
+                    {/* Tech Stack */}
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">
+                        Technologies
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProject.technologies.map((tech, i) => (
+                          <span
+                            key={i}
+                            className="px-3 py-1.5 text-xs font-medium text-cyan-100 bg-cyan-900/30 border border-cyan-500/20 rounded-md"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Business Impact */}
+                    {selectedProject.impact && (
+                      <div>
+                        <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">
+                          Key Highlights
+                        </h4>
+                        <ul className="space-y-2">
+                          {selectedProject.impact.map((item, i) => (
+                            <li key={i} className="flex gap-2 text-sm text-gray-300">
+                              <span className="text-cyan-400 mt-1">▹</span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
-                  </>
-                ) : (
-                  <img
-                    src={selectedProject.image}
-                    alt={selectedProject.title}
-                    className="w-full h-full object-cover"
-                  />
-                )}
-              </div>
+                  </div>
 
-              {/* CONTENT */}
-              <div className="p-6 overflow-y-auto md:max-h-[calc(80vh-320px)]">
-                <p className="text-gray-300 mb-4">
-                  {selectedProject.description}
-                </p>
-
-
-
-                {/* LINKS */}
-                <div className="flex gap-3 flex-wrap">
-                  {selectedProject.live && (
-                    <a
-                      href={selectedProject.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 bg-[#00ffff] text-black rounded-lg hover:bg-cyan-400"
-                    >
-                      Live
-                    </a>
-                  )}
-                  {selectedProject.readMore && (
-                    <a
-                      href={selectedProject.readMore}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 border border-[#00ffff] text-[#00ffff] rounded-lg hover:bg-[#00ffff] hover:text-black"
-                    >
-                      Read more
-                    </a>
-                  )}
                 </div>
               </div>
             </motion.div>
@@ -307,5 +357,6 @@ const ClientProjects = () => {
     </>
   );
 };
+
 
 export default ClientProjects;

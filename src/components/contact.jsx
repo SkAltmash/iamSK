@@ -55,7 +55,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative mt-12 py-20 bg-black text-white">
+    <section id="contact" className="relative pt-25 py-20 bg-black text-white">
       {/* Header */}
       <motion.div
         className="text-center mb-12"

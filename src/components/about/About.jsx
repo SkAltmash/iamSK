@@ -1,41 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Rocket, Code, Zap } from "lucide-react";
-import CountUp from "./CountUp";
-import ElectricBorder from './ElectricBorder'
+import { motion, AnimatePresence, useSpring, useTransform } from "framer-motion";
+import { Rocket, Code, Zap, GraduationCap, Briefcase, Award } from "lucide-react";
 
-// Typewriter Effect Component
-const Typewriter = ({ text, speed = 50, delay = 0 }) => {
-  const [displayText, setDisplayText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
+/* ------------------- SUB-COMPONENTS ------------------- */
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (currentIndex < text.length) {
-        setDisplayText(prev => prev + text[currentIndex]);
-        setCurrentIndex(prev => prev + 1);
-      }
-    }, speed);
-
-    return () => clearTimeout(timeout);
-  }, [currentIndex, text, speed]);
+// 1. Internal CountUp Component (Smooth Numbers)
+const CountUp = ({ to }) => {
+  const spring = useSpring(0, { mass: 0.8, stiffness: 75, damping: 15 });
+  const display = useTransform(spring, (current) => Math.round(current));
 
   useEffect(() => {
-    const delayTimeout = setTimeout(() => {
-      setCurrentIndex(0);
-      setDisplayText('');
+    spring.set(to);
+  }, [spring, to]);
+
+  return <motion.span>{display}</motion.span>;
+};
+
+// 2. Typewriter Effect
+const Typewriter = ({ text, delay = 0 }) => {
+  const [displayed, setDisplayed] = useState("");
+  
+  useEffect(() => {
+    const startTimeout = setTimeout(() => {
+      let i = 0;
+      const timer = setInterval(() => {
+        if (i < text.length) {
+          setDisplayed(text.substring(0, i + 1));
+          i++;
+        } else {
+          clearInterval(timer);
+        }
+      }, 50);
+      return () => clearInterval(timer);
     }, delay);
-
-    return () => clearTimeout(delayTimeout);
-  }, [delay]);
+    return () => clearTimeout(startTimeout);
+  }, [text, delay]);
 
   return (
-    <span>
-      {displayText}
+    <span className="font-mono">
+      {displayed}
       <motion.span
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
-        className="text-[#00ffff]"
+        animate={{ opacity: [0, 1, 0] }}
+        transition={{ repeat: Infinity, duration: 0.8 }}
+        className="text-cyan-400 ml-1"
       >
         |
       </motion.span>
@@ -43,338 +50,244 @@ const Typewriter = ({ text, speed = 50, delay = 0 }) => {
   );
 };
 
-// Floating Particles Component
-const FloatingParticles = () => {
-  const particles = Array.from({ length: 20 }, (_, i) => i);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {particles.map((particle) => (
-        <motion.div
-          key={particle}
-          className="absolute w-1 h-1 bg-[#00ffff] rounded-full opacity-30"
-          initial={{
-            x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920),
-            y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080),
-          }}
-          animate={{
-            x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920),
-            y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080),
-            opacity: [0.3, 0.8, 0.3],
-          }}
-          transition={{
-            duration: Math.random() * 10 + 10,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-// Interactive Stat Card
-const StatCard = ({ value, label, icon, delay }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div
-      className="flex flex-col items-center p-6 bg-gradient-to-br from-[#111] to-[#0a0a0a] rounded-2xl border border-[#00ffff]/20 hover:border-[#00ffff]/50 transition-all duration-300 cursor-pointer"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.6 }}
-      whileHover={{ scale: 1.05, y: -5 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
-      <motion.div
-        animate={{ rotate: isHovered ? 360 : 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl mb-2 text-[#00ffff]"
-      >
+// 3. Stat Card with Hover Glow
+const StatCard = ({ value, label, icon, delay }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay, duration: 0.5 }}
+    whileHover={{ y: -5 }}
+    className="relative group bg-white/5 border border-white/10 p-6 rounded-2xl overflow-hidden"
+  >
+    <div className="absolute inset-0 bg-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+    
+    <div className="relative z-10 flex flex-col items-center">
+      <div className="p-3 bg-cyan-500/20 text-cyan-400 rounded-lg mb-3 group-hover:scale-110 transition-transform duration-300">
         {icon}
-      </motion.div>
-      <span className="text-3xl font-bold text-[#00ffff] mb-1">
-        <CountUp from={0} to={value} duration={2} />
-        {label.includes('+') ? '+' : ''}
-      </span>
-      <span className="text-sm text-gray-400 text-center">{label.replace('+', '')}</span>
-    </motion.div>
-  );
-};
-
-// Timeline Component for Education
-const TimelineItem = ({ item, index, isLast }) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), index * 200);
-    return () => clearTimeout(timer);
-  }, [index]);
-
-  return (
-    <motion.div
-      className="relative flex items-start mb-8"
-      initial={{ opacity: 0, x: -50 }}
-      animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-      transition={{ duration: 0.6, delay: index * 0.2 }}
-    >
-      {/* Timeline Line */}
-      <div className="flex flex-col items-center mr-6">
-        <motion.div
-          className="w-4 h-4 bg-[#00ffff] rounded-full border-4 border-black"
-          initial={{ scale: 0 }}
-          animate={isVisible ? { scale: 1 } : { scale: 0 }}
-          transition={{ duration: 0.4, delay: index * 0.2 + 0.3 }}
-        />
-        {!isLast && (
-          <motion.div
-            className="w-0.5 h-16 bg-gradient-to-b from-[#00ffff] to-transparent mt-2"
-            initial={{ height: 0 }}
-            animate={isVisible ? { height: 64 } : { height: 0 }}
-            transition={{ duration: 0.8, delay: index * 0.2 + 0.5 }}
-          />
-        )}
       </div>
+      <div className="text-3xl font-bold text-white mb-1 flex">
+        <CountUp to={value} />
+        <span className="text-cyan-400">+</span>
+      </div>
+      <div className="text-xs text-gray-400 uppercase tracking-wider font-medium">
+        {label}
+      </div>
+    </div>
+  </motion.div>
+);
 
-      {/* Content */}
-      <motion.div
-        className="bg-gradient-to-r from-[#111] to-[#0a0a0a] p-6 rounded-2xl border border-[#00ffff]/20 flex-1 hover:border-[#00ffff]/50 transition-all duration-300"
-        whileHover={{ scale: 1.02, x: 10 }}
-        transition={{ type: "spring", stiffness: 300 }}
-      >
-        <div className="flex items-start gap-4">
-          <motion.img
-            src={item.image}
-            alt={item.title}
-            className="w-16 h-16 rounded-lg object-cover"
-            whileHover={{ rotate: 5, scale: 1.1 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          />
-          <div className="flex-1">
-            <h3 className="text-xl font-bold text-[#00ffff] mb-1">{item.title}</h3>
-            <p className="text-gray-300 text-sm mb-1">{item.institution}</p>
-            <p className="text-gray-400 text-xs">{item.duration}</p>
-            {item.grade && (
-              <motion.div
-                className="mt-2 inline-block px-3 py-1 bg-[#00ffff]/10 border border-[#00ffff]/30 rounded-full text-xs text-[#00ffff]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: index * 0.2 + 1 }}
-              >
-                {item.grade}
-              </motion.div>
-            )}
-          </div>
+// 4. Timeline Item (Education)
+const TimelineItem = ({ item, index, isLast }) => (
+  <motion.div
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay: index * 0.2 }}
+    className="relative pl-8 pb-12 group"
+  >
+    {/* Connecting Line */}
+    {!isLast && (
+      <div className="absolute left-[11px] top-4 bottom-0 w-0.5 bg-white/10 group-hover:bg-cyan-500/50 transition-colors duration-500">
+        <motion.div 
+          initial={{ height: 0 }}
+          animate={{ height: "100%" }}
+          transition={{ duration: 1, delay: 0.5 + index * 0.2 }}
+          className="w-full bg-cyan-400 origin-top"
+        />
+      </div>
+    )}
+
+    {/* Dot */}
+    <div className="absolute left-0 top-1.5 w-6 h-6 bg-[#0a0a0a] border-2 border-cyan-500 rounded-full flex items-center justify-center z-10 shadow-[0_0_10px_rgba(6,182,212,0.5)]">
+      <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+    </div>
+
+    {/* Card Content */}
+    <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-cyan-500/30 transition-all duration-300 hover:bg-white/10">
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <img 
+          src={item.image} 
+          alt={item.institution} 
+          className="w-12 h-12 rounded-lg object-cover bg-white/10"
+        />
+        <div className="flex-1">
+          <h3 className="text-lg font-bold text-white">{item.title}</h3>
+          <p className="text-cyan-400 text-sm font-medium">{item.institution}</p>
         </div>
-      </motion.div>
-    </motion.div>
-  );
-};
+        <div className="text-right">
+          <span className="inline-block px-3 py-1 bg-white/5 rounded-full text-xs text-gray-400 border border-white/5 whitespace-nowrap">
+            {item.duration}
+          </span>
+          <div className="mt-1 text-xs text-gray-500 text-right">{item.grade}</div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
+/* ------------------- MAIN COMPONENT ------------------- */
 
 const About = () => {
   const [activeTab, setActiveTab] = useState("about");
 
-  const tabContentVariants = {
-    initial: { opacity: 0, x: 30 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -30 },
-  };
-
   return (
-    <section className="relative w-full mt-20 pt-5 min-h-screen bg-black text-white flex justify-center items-center px-4 overflow-hidden">
-      <FloatingParticles />
+    <section className="relative w-full min-h-screen pt-28 pb-16 bg-[#050505] text-white flex justify-center items-center px-4 overflow-hidden">
+      
+      {/* 🔹 Background Decor */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-[700px] w-full text-center relative z-10">
-        {/* Tabs */}
-        <div className="flex justify-center gap-6 mb-8">
-          <motion.button
-            className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-              activeTab === "about"
-                ? "bg-[#00ffff] text-black shadow-lg shadow-[#00ffff]/50"
-                : "bg-[#111] text-gray-400 border border-[#00ffff] hover:bg-[#00ffff] hover:text-black"
-            }`}
-            onClick={() => setActiveTab("about")}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            About Me
-          </motion.button>
-          <motion.button
-            className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-              activeTab === "education"
-                ? "bg-[#00ffff] text-black shadow-lg shadow-[#00ffff]/50"
-                : "bg-[#111] text-gray-400 border border-[#00ffff] hover:bg-[#00ffff] hover:text-black"
-            }`}
-            onClick={() => setActiveTab("education")}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Education
-          </motion.button>
-        </div>
-
-        <AnimatePresence mode="wait">
-          {activeTab === "about" && (
-            <motion.div
-              key="about"
-              variants={tabContentVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.5 }}
-            >
-              <ElectricBorder
-                color="#7df9ff"
-                speed={1}
-                chaos={0.5}
-                thickness={2}
-                className="w-35 h-35 mx-auto mb-2"
-              >
-                <motion.img
+      <div className="max-w-4xl w-full relative z-10">
+        
+        {/* 🔹 Glass Container */}
+        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+          
+          {/* Header Section */}
+          <div className="p-8 pb-0 text-center">
+            {/* Animated Profile Glow */}
+            <div className="relative w-32 h-32 mx-auto mb-6 group">
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-1 rounded-full bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-500 opacity-70 blur-md group-hover:opacity-100 transition-opacity"
+              />
+              <div className="relative w-full h-full rounded-full p-[2px] bg-black overflow-hidden">
+                 <img
                   src="logo.png"
-                  alt="Altamash"
-                  className="w-35 h-35 rounded-lg mx-auto mb-6 object-cover"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  whileHover={{ scale: 1.05, rotate: 5 }}
+                  alt="Profile"
+                  className="w-full h-full rounded-full object-cover"
                 />
-              </ElectricBorder>
+              </div>
+            </div>
 
-              <motion.h1
-                className="text-4xl sm:text-5xl font-bold mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-              >
-                About <span style={{ color: "#00ffff" }}>Me</span>
-              </motion.h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-2">
+              About <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Me</span>
+            </h1>
+            
+            <div className="h-8 mb-8 text-gray-400">
+               <Typewriter text="Creative Thinker • Full Stack Dev • Problem Solver" delay={500} />
+            </div>
 
-              <motion.h2
-                className="text-lg sm:text-xl font-medium text-gray-400 mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-              >
-                <Typewriter
-                  text="Creative Thinker • Full Stack Developer • Problem Solver"
-                  speed={100}
-                  delay={800}
-                />
-              </motion.h2>
-
-              <motion.p
-                className="text-gray-300 text-base sm:text-lg leading-relaxed mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
-              >
-                I&apos;m Altamash, a passionate full stack developer skilled in
-                building both web and mobile applications. With expertise in
-                React, React Native, Node.js, Firebase, and SQL, I transform
-                innovative ideas into scalable, high-performance solutions that
-                deliver seamless user experiences.
-              </motion.p>
-
-              <motion.div
-                className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
-              >
-                <StatCard
-                  value={3}
-                  label="Years Learning+"
-                  icon={<Rocket className="w-6 h-6" />}
-                  delay={1.0}
-                />
-                <StatCard
-                  value={15}
-                  label="Projects Completed+"
-                  icon={<Code className="w-6 h-6" />}
-                  delay={1.2}
-                />
-                <StatCard
-                  value={10}
-                  label="Full Stack Technologies+"
-                  icon={<Zap className="w-6 h-6" />}
-                  delay={1.4}
-                />
-              </motion.div>
-
-              <motion.a
-                href="/contact"
-                className="inline-block px-8 py-3 rounded-full text-black font-medium shadow-lg"
-                style={{ backgroundColor: "#00ffff" }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.6, duration: 0.4 }}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 0 20px rgba(0, 255, 255, 0.5)"
-                }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Let&apos;s Connect
-              </motion.a>
-            </motion.div>
-          )}
-
-          {activeTab === "education" && (
-            <motion.div
-              key="education"
-              variants={tabContentVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.5 }}
-              className="text-left max-w-4xl mx-auto"
-            >
-              <motion.h1
-                className="text-3xl font-bold mb-8 text-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-              >
-                Education <span style={{ color: "#00ffff" }}>Journey</span>
-              </motion.h1>
-
-              <div className="relative">
-                {[
-                  {
-                    title: "Bachelor of Computer Applications (BCA)",
-                    institution: "RAICSIT, Wardha - RTMNU University",
-                    duration: "2022 – 2026 (Currently in 3rd Year)",
-                    image: "RTMNU.jpg",
-                    grade: "Pursuing"
-                  },
-                  {
-                    title: "HSC (Computer Science)",
-                    institution: "Dr. B.R. Ambedkar Jr. College, Hinganghat",
-                    duration: "Completed: 2021",
-                    image: "SSC - Maharashtra Board.webp",
-                    grade: "CS Stream"
-                  },
-                  {
-                    title: "SSC - Maharashtra Board",
-                    institution: "Sangay Gandhi High School, Hinganghat",
-                    duration: "Completed: 2019",
-                    image: "SSC - Maharashtra Board.webp",
-                    grade: "Distinction"
-                  }
-                ].map((item, index) => (
-                  <TimelineItem
-                    key={index}
-                    item={item}
-                    index={index}
-                    isLast={index === 2}
-                  />
+            {/* 🔹 Sliding Tabs */}
+            <div className="flex justify-center mb-8">
+              <div className="flex bg-white/5 p-1 rounded-full border border-white/10">
+                {["about", "education"].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`relative px-8 py-2.5 rounded-full text-sm font-semibold transition-colors duration-300 z-10 capitalize
+                      ${activeTab === tab ? "text-black" : "text-gray-400 hover:text-white"}`}
+                  >
+                    {activeTab === tab && (
+                      <motion.div
+                        layoutId="activeTabPill"
+                        className="absolute inset-0 bg-cyan-400 rounded-full -z-10 shadow-[0_0_15px_rgba(34,211,238,0.5)]"
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                    {tab}
+                  </button>
                 ))}
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+
+          {/* 🔹 Dynamic Content Area */}
+          <div className="p-8 pt-2 min-h-[400px]">
+            <AnimatePresence mode="wait">
+              
+              {/* ABOUT TAB */}
+              {activeTab === "about" && (
+                <motion.div
+                  key="about"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-8"
+                >
+                  <p className="text-gray-300 text-lg leading-relaxed text-center max-w-2xl mx-auto">
+                    I&apos;m <span className="text-cyan-400 font-semibold">Altamash</span>, a passionate full stack developer crafting modern web & mobile experiences. 
+                    I bridge the gap between complex backend logic and sleek frontend design.
+                  </p>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <StatCard 
+                      value={3} 
+                      label="Years Exp" 
+                      icon={<Rocket size={24} />} 
+                      delay={0.1} 
+                    />
+                    <StatCard 
+                      value={15} 
+                      label="Projects" 
+                      icon={<Code size={24} />} 
+                      delay={0.2} 
+                    />
+                    <StatCard 
+                      value={10} 
+                      label="Tech Stack" 
+                      icon={<Zap size={24} />} 
+                      delay={0.3} 
+                    />
+                  </div>
+
+                  <div className="text-center pt-4">
+                    <a
+                      href="/contact"
+                      className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-cyan-500/25 transition-transform active:scale-95"
+                    >
+                      <Briefcase size={18} /> Let&apos;s Work Together
+                    </a>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* EDUCATION TAB */}
+              {activeTab === "education" && (
+                <motion.div
+                  key="education"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="max-w-2xl mx-auto"
+                >
+                  {[
+                    {
+                      title: "Bachelor of Computer Applications",
+                      institution: "RAICSIT, Wardha (RTMNU)",
+                      duration: "2022 – Present",
+                      image: "RTMNU.jpg",
+                      grade: "Pursuing"
+                    },
+                    {
+                      title: "Higher Secondary Certificate",
+                      institution: "Dr. B.R. Ambedkar Jr. College",
+                      duration: "2021",
+                      image: "SSC - Maharashtra Board.webp",
+                      grade: "Computer Science"
+                    },
+                    {
+                      title: "Secondary School Certificate",
+                      institution: "Sangay Gandhi High School",
+                      duration: "2019",
+                      image: "SSC - Maharashtra Board.webp",
+                      grade: "Distinction"
+                    }
+                  ].map((item, index, arr) => (
+                    <TimelineItem 
+                      key={index} 
+                      item={item} 
+                      index={index} 
+                      isLast={index === arr.length - 1} 
+                    />
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </section>
   );
