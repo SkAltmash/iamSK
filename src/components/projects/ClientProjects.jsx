@@ -36,6 +36,22 @@ const ClientProjects = () => {
 
  const projects = [
   {
+    slug: "Smart-Fix-Services",
+    title: "Smart Fix Services Website",
+    image: "smartfix.png",
+    description:
+      "A sleek, modern website for Smart Fix Services, a tech repair business in hinganghat, showcasing services, pricing, and contact info with smooth animations.",
+    impact: [
+      "Enhanced online visibility for local business",
+      "Professional branding with fast-loading UI",
+    ],
+    technologies: ["React", "Next.js", "Firebase" , "Tailwind CSS", "Framer Motion"],
+    status: "Delivered to Client",
+    live: "https://smartfixservices.in/",
+    youtube: "https://www.youtube.com/embed/3fcvd1ldcy0",
+    
+  },
+  {
     slug: "pos-perfect-auto-parts",
     title: "Sales & Inventory Management System (POS)",
     image: "PerfectAutoParts.png",
@@ -48,13 +64,12 @@ const ClientProjects = () => {
     technologies: ["React", "Node.js", "Firebase", "Tailwind CSS", "Charts"],
     status: "Delivered to Client",
     youtube: "https://www.youtube.com/embed/vFygI_2ArP4",
-    readMore:
-      "https://www.linkedin.com/posts/skaltamash18_reactjs-nodejs-firebase-activity-7403004146406088704-vYuR",
+    
   },
 
   {
     slug: "marco-teck",
-    title: "Marco Teck – Business Website",
+    title: "MarcoTech E-Com Website",
     image: "marco.png",
     description:
       "A modern, responsive business website built for Marco Teck Hyderabad to showcase services, brand identity, and contact details with smooth animations.",
@@ -62,10 +77,10 @@ const ClientProjects = () => {
       "Improved online presence for local business",
       "Professional branding with fast-loading UI",
     ],
-    technologies: ["React", "Tailwind CSS", "Framer Motion"],
+    technologies: ["React", "Next.js", "Firebase" , "Tailwind CSS", "Framer Motion"],
     status: "Delivered to Client",
-    live: "https://marcotech.netlify.app/",
-    youtube: "https://www.youtube.com/embed/3fcvd1ldcy0",
+    live: "https://marcotech.shop/",
+    youtube: "https://www.youtube.com/embed/xQyEWSui1Xk",
   },
 
   {
