@@ -7,7 +7,7 @@ import Projects from './components/project'
 import Contact from './components/contact'
 import Splash from './components/Splash'
 import Services from './components/Services'
-
+import ProjectDetails from './components/ProjectDetails'
 function App() {
   const location = useLocation();
 
@@ -22,6 +22,8 @@ function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
+       <Route path="/projects/:slug" element={<ProjectDetails />} />
+
       </Routes>
     </div>
   )
