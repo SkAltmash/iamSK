@@ -20,7 +20,7 @@ import {
 const webPackages = [
   {
     title: "Starter",
-    price: "₹3,999",
+    price: "₹9,999",
     desc: "Perfect for personal portfolios or landing pages.",
     gradient: "from-blue-500 to-cyan-400",
     popular: false,
@@ -37,7 +37,7 @@ const webPackages = [
   },
   {
     title: "Business",
-    price: "₹5,999",
+    price: "₹16,999",
     desc: "Ideal for small businesses and service providers.",
     gradient: "from-purple-500 to-pink-500",
     popular: true,
@@ -54,7 +54,7 @@ const webPackages = [
   },
   {
     title: "Premium",
-    price: "₹7,999",
+    price: "₹19,999",
     desc: "Dynamic websites with content management capabilities.",
     gradient: "from-orange-400 to-red-500",
     popular: false,
