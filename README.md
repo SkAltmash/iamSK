@@ -27,11 +27,11 @@ npm install
 Create a `.env` file in the project root:
 
 ```env
-VITE_EMAILJS_SERVICE=service_ignny5q
-VITE_EMAILJS_TEMPLATE=template_lto1r2d
-VITE_EMAILJS_PUBLIC_KEY=dce5ax0pBBQNz2sE-
-VITE_CLOUDINARY_CLOUD_NAME=dgqwe7tpc
-VITE_CLOUDINARY_UPLOAD_PRESET=demo12
+VITE_EMAILJS_SERVICE=""
+VITE_EMAILJS_TEMPLATE=""
+VITE_EMAILJS_PUBLIC_KEY=""
+VITE_CLOUDINARY_CLOUD_NAME=""
+VITE_CLOUDINARY_UPLOAD_PRESET=""
 ```
 
 > ⚠️ Never commit `.env` to git. It is already in `.gitignore`.

@@ -41,6 +41,12 @@ export default function Home() {
     const [projects, setProjects] = useState([]);
     const [blogs, setBlogs] = useState([]);
 
+    const safeSrc = (src) => {
+        if (!src) return null;
+        const trimmed = typeof src === 'string' ? src.trim() : src;
+        return trimmed === '' ? null : trimmed;
+    };
+
     useEffect(() => {
         const fetchPreviews = async () => {
             try {
@@ -135,7 +141,7 @@ export default function Home() {
                         <div key={proj.id} className="min-w-[85vw] md:min-w-0 snap-center">
                             <Link to={proj.liveLink || "#"} target="_blank" className="group block">
                                 <div className="relative rounded-[2rem] overflow-hidden mb-6 bg-white/5">
-                                    <img src={proj.image} alt={proj.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1" />
+                                    <img src={safeSrc(proj.image)} alt={proj.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
                                     <div className="absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
                                         <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex justify-between items-center">
@@ -165,7 +171,7 @@ export default function Home() {
                                 <SpotlightCard color="pink" className="h-full">
                                     <Link to={`/blogs/${blog.id}`} className="block p-4">
                                         <div className="aspect-video rounded-2xl overflow-hidden mb-6">
-                                            <img src={blog.image} className="w-full h-full object-cover" alt={blog.title} />
+                                            <img src={safeSrc(blog.image)} className="w-full h-full object-cover" alt={blog.title} />
                                         </div>
                                         <div className="flex items-center gap-3 text-xs font-black text-pink-500 uppercase tracking-tighter mb-4">
                                             <Calendar size={14} />
