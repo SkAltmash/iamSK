@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "../firebase";
 import {
   Check,
   X,
@@ -90,6 +92,7 @@ const otherServices = [
   },
 ];
 
+
 /* ---------------- COMPONENTS ---------------- */
 
 const PricingCard = ({ pkg, index }) => {
@@ -99,9 +102,8 @@ const PricingCard = ({ pkg, index }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className={`relative flex flex-col p-1 rounded-2xl ${
-        pkg.popular ? "md:-mt-4 md:mb-4 z-10 shadow-[0_0_40px_rgba(168,85,247,0.3)]" : "border border-white/10 bg-[#0a0a0a]"
-      }`}
+      className={`relative flex flex-col p-1 rounded-2xl ${pkg.popular ? "md:-mt-4 md:mb-4 z-10 shadow-[0_0_40px_rgba(168,85,247,0.3)]" : "border border-white/10 bg-[#0a0a0a]"
+        }`}
     >
       {/* Popular Badge */}
       {pkg.popular && (
@@ -113,17 +115,17 @@ const PricingCard = ({ pkg, index }) => {
       {/* Gradient Border Background for Popular Card */}
       {pkg.popular ? (
         <div className={`absolute inset-0 bg-gradient-to-br ${pkg.gradient} rounded-2xl opacity-100 p-[1px]`}>
-           <div className="h-full w-full bg-[#0a0a0a] rounded-2xl" />
+          <div className="h-full w-full bg-[#0a0a0a] rounded-2xl" />
         </div>
       ) : null}
 
       <div className="relative h-full bg-[#0a0a0a] rounded-xl p-8 flex flex-col z-10">
-        
+
         {/* Header */}
         <div className="text-center mb-6">
           <h3 className="text-lg font-medium text-gray-300 mb-2">{pkg.title}</h3>
           <div className="flex justify-center items-baseline gap-1">
-             <span className="text-4xl font-bold text-white tracking-tight">{pkg.price}</span>
+            <span className="text-4xl font-bold text-white tracking-tight">{pkg.price}</span>
           </div>
           <p className="text-xs text-gray-500 mt-3">{pkg.desc}</p>
         </div>
@@ -148,11 +150,10 @@ const PricingCard = ({ pkg, index }) => {
         {/* Action */}
         <Link
           to="/contact"
-          className={`w-full py-3.5 flex items-center justify-center gap-2 rounded-xl font-bold transition-all active:scale-95 ${
-            pkg.popular 
-            ? `bg-gradient-to-r ${pkg.gradient} text-white hover:shadow-lg hover:shadow-purple-500/20` 
+          className={`w-full py-3.5 flex items-center justify-center gap-2 rounded-xl font-bold transition-all active:scale-95 ${pkg.popular
+            ? `bg-gradient-to-r ${pkg.gradient} text-white hover:shadow-lg hover:shadow-purple-500/20`
             : "bg-white/5 border border-white/5 text-white hover:bg-white/10"
-          }`}
+            }`}
         >
           Choose {pkg.title}
         </Link>
@@ -162,9 +163,36 @@ const PricingCard = ({ pkg, index }) => {
 };
 
 const Services = () => {
+  const [dynamicServices, setDynamicServices] = useState([]);
+  const [pricingPlans, setPricingPlans] = useState([]);
+
+  useEffect(() => {
+    const fetchServicesAndPlans = async () => {
+      try {
+        const [servicesSnap, plansSnap] = await Promise.all([
+          getDocs(query(collection(db, "services"), orderBy("order", "asc"))),
+          getDocs(query(collection(db, "pricingPlans"), orderBy("order", "asc")))
+        ]);
+
+        setDynamicServices(servicesSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+        setPricingPlans(plansSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+      } catch (err) {
+        console.error("Failed to fetch services or plans", err);
+        // Fallbacks if index not ready
+        try {
+          const snapS = await getDocs(collection(db, "services"));
+          const snapP = await getDocs(collection(db, "pricingPlans"));
+          setDynamicServices(snapS.docs.map(d => ({ id: d.id, ...d.data() })));
+          setPricingPlans(snapP.docs.map(d => ({ id: d.id, ...d.data() })));
+        } catch { }
+      }
+    };
+    fetchServicesAndPlans();
+  }, []);
+
   return (
     <section className="min-h-screen bg-[#050505] text-white pt-32 pb-20 overflow-hidden relative">
-      
+
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-cyan-900/10 via-purple-900/5 to-transparent pointer-events-none" />
       <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
@@ -202,8 +230,8 @@ const Services = () => {
 
         {/* 🔹 MAIN PRICING GRID */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto mb-32 items-start">
-          {webPackages.map((pkg, i) => (
-            <PricingCard key={i} pkg={pkg} index={i} />
+          {pricingPlans.map((pkg, i) => (
+            <PricingCard key={pkg.id || i} pkg={pkg} index={i} />
           ))}
         </div>
 
@@ -214,19 +242,21 @@ const Services = () => {
             <p className="text-gray-400">Looking for something else?</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {otherServices.map((service, i) => (
+            {dynamicServices.map((service, i) => (
               <motion.div
-                key={i}
+                key={service.id || i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-[#0a0a0a] border border-white/5 p-6 rounded-xl hover:border-cyan-500/30 transition-colors group"
+                className="bg-[#0a0a0a] border border-white/5 p-6 rounded-xl hover:border-cyan-500/30 transition-colors group flex flex-col"
               >
-                <div className="mb-4 text-gray-400 group-hover:text-cyan-400 transition-colors">
-                  {service.icon}
-                </div>
+                {service.icon && (
+                  <div className="mb-4 w-12 h-12 rounded-lg bg-white/5 overflow-hidden flex items-center justify-center shrink-0">
+                    <img src={service.icon} alt={service.title} className="w-full h-full object-cover" />
+                  </div>
+                )}
                 <h3 className="text-lg font-bold text-white mb-2">{service.title}</h3>
-                <p className="text-sm text-gray-500">{service.desc}</p>
+                <p className="text-sm text-gray-500">{service.description}</p>
               </motion.div>
             ))}
           </div>
@@ -256,34 +286,34 @@ const Services = () => {
               </div>
             </div>
             <div className="md:w-1/2 relative">
-               <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 blur-[80px] opacity-20" />
-               <div className="relative bg-[#050505] border border-white/10 rounded-xl p-6 md:p-8">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center">
-                      <Globe size={24} className="text-gray-300" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-gray-400">Project Status</div>
-                      <div className="text-green-400 font-bold flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> Live & Healthy
-                      </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 blur-[80px] opacity-20" />
+              <div className="relative bg-[#050505] border border-white/10 rounded-xl p-6 md:p-8">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center">
+                    <Globe size={24} className="text-gray-300" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-400">Project Status</div>
+                    <div className="text-green-400 font-bold flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> Live & Healthy
                     </div>
                   </div>
-                  <div className="space-y-3">
-                    <div className="h-2 bg-gray-800 rounded-full w-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        whileInView={{ width: "92%" }}
-                        transition={{ duration: 1.5 }}
-                        className="h-full bg-cyan-500" 
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>Performance Score</span>
-                      <span className="text-white">98/100</span>
-                    </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="h-2 bg-gray-800 rounded-full w-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: "92%" }}
+                      transition={{ duration: 1.5 }}
+                      className="h-full bg-cyan-500"
+                    />
                   </div>
-               </div>
+                  <div className="flex justify-between text-xs text-gray-500">
+                    <span>Performance Score</span>
+                    <span className="text-white">98/100</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -296,31 +326,31 @@ const Services = () => {
           className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-white/10 p-12 text-center"
         >
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
-          
+
           <div className="relative z-10 max-w-2xl mx-auto">
-             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-               Not sure which plan is right?
-             </h2>
-             <p className="text-gray-300 mb-8 text-lg">
-               Contact me directly via WhatsApp. I'll help you select the best package for your budget.
-             </p>
-             
-             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-               <a
-                 href="https://wa.me/9823856261"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 className="px-8 py-3.5 rounded-full bg-[#25D366] text-black font-bold hover:brightness-110 transition-all flex items-center justify-center gap-2"
-               >
-                 <MessageSquare size={18} /> Chat on WhatsApp
-               </a>
-               <Link
-                 to="/contact"
-                 className="px-8 py-3.5 rounded-full border border-white/20 hover:bg-white/10 transition-all font-medium text-white"
-               >
-                 Send an Email
-               </Link>
-             </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+              Not sure which plan is right?
+            </h2>
+            <p className="text-gray-300 mb-8 text-lg">
+              Contact me directly via WhatsApp. I'll help you select the best package for your budget.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="https://wa.me/9823856261"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-3.5 rounded-full bg-[#25D366] text-black font-bold hover:brightness-110 transition-all flex items-center justify-center gap-2"
+              >
+                <MessageSquare size={18} /> Chat on WhatsApp
+              </a>
+              <Link
+                to="/contact"
+                className="px-8 py-3.5 rounded-full border border-white/20 hover:bg-white/10 transition-all font-medium text-white"
+              >
+                Send an Email
+              </Link>
+            </div>
           </div>
         </motion.div>
 

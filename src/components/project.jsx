@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ClientProjects from "./projects/ClientProjects";
-import PersonalProjects from "./projects/PersonalProjects";
 import Certificates from "./projects/Certificates";
 import TechStack from "./projects/TechStack";
 
@@ -10,7 +9,6 @@ const Projects = () => {
 
   const tabs = [
     { key: "client", label: "Client Work" },
-    { key: "projects", label: "Personal Projects" },
     { key: "certificates", label: "Achievements" },
     { key: "techstack", label: "Tech Stack" },
   ];
@@ -22,8 +20,8 @@ const Projects = () => {
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        
-    
+
+
         {/* 🔹 SLIDING TABS NAVIGATION */}
         <div className="flex justify-center mb-16">
           <div className="flex flex-wrap justify-center gap-2 sm:gap-0 bg-white/5 p-1.5 rounded-2xl sm:rounded-full border border-white/10 backdrop-blur-md">
@@ -58,7 +56,6 @@ const Projects = () => {
               transition={{ duration: 0.3 }}
             >
               {activeTab === "client" && <ClientProjects />}
-              {activeTab === "projects" && <PersonalProjects />}
               {activeTab === "certificates" && <Certificates />}
               {activeTab === "techstack" && <TechStack />}
             </motion.div>

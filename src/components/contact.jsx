@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { FaEnvelope, FaGithub, FaLinkedin, FaPaperPlane, FaDownload } from "react-icons/fa";
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
+import { doc, getDoc } from "firebase/firestore";
 
 // Reusable Contact Card Component
 const ContactCard = ({ Icon, title, description, link, linkText, subText, href, external }) => (
@@ -29,6 +30,23 @@ export default function Contact() {
   const form = useRef();
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState("");
+
+  React.useEffect(() => {
+    const fetchResume = async () => {
+      try {
+        const { db } = await import("../firebase");
+        const docRef = doc(db, "globals", "resume");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists() && docSnap.data().url) {
+          setResumeUrl(docSnap.data().url);
+        }
+      } catch (err) {
+        console.error("Failed to load resume", err);
+      }
+    };
+    fetchResume();
+  }, []);
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -36,12 +54,27 @@ export default function Contact() {
 
     emailjs
       .sendForm(
-        "service_ignny5q", // Replace with your service ID
-        "template_lto1r2d", // Replace with your template ID
+        import.meta.env.VITE_EMAILJS_SERVICE,
+        import.meta.env.VITE_EMAILJS_TEMPLATE,
         form.current,
-        "dce5ax0pBBQNz2sE-" // Replace with your public key
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       )
-      .then(() => {
+      .then(async () => {
+        try {
+          const { addDoc, collection } = await import("firebase/firestore");
+          const { db } = await import("../firebase");
+          await addDoc(collection(db, "messages"), {
+            name: form.current.user_name.value,
+            email: form.current.user_email.value,
+            subject: form.current.subject.value,
+            message: form.current.message.value,
+            createdAt: new Date(),
+            read: false
+          });
+        } catch (dbErr) {
+          console.error("Failed to save to db", dbErr);
+        }
+
         setSent(true);
         form.current.reset();
         setLoading(false);
@@ -119,7 +152,15 @@ export default function Contact() {
               <FaEnvelope /> Email Me Directly
             </a>
             <a
-              href="/resume.pdf"
+              href={resumeUrl || "#"}
+              target={resumeUrl ? "_blank" : "_self"}
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                if (!resumeUrl) {
+                  e.preventDefault();
+                  alert("Resume not available yet.");
+                }
+              }}
               className="flex items-center gap-2 border border-[#00ffff]/40 px-4 py-2 rounded-lg hover:border-[#00ffff] transition font-semibold"
             >
               <FaDownload /> Download Resume
@@ -166,9 +207,8 @@ export default function Contact() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 rounded-lg font-semibold flex justify-center items-center gap-2 transition-all duration-300 ${
-                loading ? "bg-[#00ffff]/40 cursor-not-allowed" : "bg-[#00ffff] hover:bg-[#00e6e6]"
-              } text-black font-bold`}
+              className={`w-full py-3 rounded-lg font-semibold flex justify-center items-center gap-2 transition-all duration-300 ${loading ? "bg-[#00ffff]/40 cursor-not-allowed" : "bg-[#00ffff] hover:bg-[#00e6e6]"
+                } text-black font-bold`}
             >
               {loading ? "Sending..." : <><FaPaperPlane /> Send Message</>}
             </button>

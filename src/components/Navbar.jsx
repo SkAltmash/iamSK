@@ -13,6 +13,7 @@ const Navbar = () => {
     { path: "/about", label: "About" },
     { path: "/projects", label: "Projects" },
     { path: "/services", label: "Services" },
+    { path: "/blogs", label: "Blogs" },
     { path: "/contact", label: "Contact" },
   ];
 
@@ -36,7 +37,7 @@ const Navbar = () => {
             >
               <div className="relative h-10 w-10 overflow-hidden rounded-full border border-white/20 group-hover:border-cyan-400 transition-colors">
                 <img
-                  src="logo.png"
+                  src="/logo.png"
                   alt="Logo"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:rotate-180"
                 />
@@ -143,7 +144,7 @@ const Navbar = () => {
               >
                 <div className="flex flex-col p-4 pt-0 gap-2">
                   <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4" />
-                  
+
                   {navLinks.map((link, i) => (
                     <motion.div
                       key={link.path}
@@ -155,10 +156,9 @@ const Navbar = () => {
                         to={link.path}
                         onClick={() => setIsOpen(false)}
                         className={({ isActive }) =>
-                          `flex items-center justify-between p-3 rounded-xl transition-all ${
-                            isActive
-                              ? "bg-white/10 text-cyan-400"
-                              : "text-gray-400 hover:text-white hover:bg-white/5"
+                          `flex items-center justify-between p-3 rounded-xl transition-all ${isActive
+                            ? "bg-white/10 text-cyan-400"
+                            : "text-gray-400 hover:text-white hover:bg-white/5"
                           }`
                         }
                       >
@@ -190,7 +190,7 @@ const Navbar = () => {
           </AnimatePresence>
         </div>
       </nav>
-      
+
       {/* Spacer to prevent content from hiding behind the fixed navbar */}
       <div className="h-24" />
     </>

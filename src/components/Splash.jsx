@@ -46,7 +46,7 @@ const Splash = () => {
       >
         {/* Logo */}
         <motion.img
-          src="logo.png"
+          src="/logo.png"
           alt="Altamash Logo"
           className="w-28 h-28 mb-10"
           initial={{ scale: 0.8 }}
