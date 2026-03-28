@@ -136,7 +136,7 @@ export default function Footer() {
                 {/* 🔹 Bottom Bar */}
                 <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="flex flex-col md:flex-row items-center gap-4 text-sm">
-                        <p>© {currentYear} Altamash Khan. All rights reserved.</p>
+                        <p>© {currentYear} SK Altamash . All rights reserved.</p>
                         <div className="hidden md:block w-1 h-1 rounded-full bg-gray-700" />
                         <p className="flex items-center gap-2">
                             Built with <Heart size={14} className="text-pink-500 animate-pulse" /> & React
