@@ -1,0 +1,12 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # These are public keys meant to be accessed in the browser
+  SECRETS_SCAN_OMIT_KEYS = "VITE_EMAILJS_SERVICE,VITE_EMAILJS_TEMPLATE,VITE_EMAILJS_PUBLIC_KEY,VITE_CLOUDINARY_CLOUD_NAME,VITE_CLOUDINARY_UPLOAD_PRESET"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
