@@ -37,14 +37,14 @@ const Avatar = ({ avatar, name }) => {
 const TestimonialCard = ({ item, isActive }) => (
     <motion.div
         layout
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: isActive ? 1 : 0.92, y: 0 }}
-        exit={{ opacity: 0, scale: 0.92, y: -10 }}
+        initial={{ opacity: 0, scale: 0.95, x: 60 }}
+        animate={{ opacity: 1, scale: isActive ? 1 : 0.92, x: 0 }}
+        exit={{ opacity: 0, scale: 0.92, x: -60 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className={`relative rounded-3xl border p-8 flex flex-col gap-4 transition-all duration-500
+        className={`relative rounded-3xl border p-8 gap-4 transition-all duration-500
             ${isActive
-                ? "bg-gradient-to-br from-[#111] to-[#0d0d0d] border-white/20 shadow-[0_0_60px_rgba(34,211,238,0.06)]"
-                : "bg-[#0a0a0a] border-white/8 opacity-60"
+                ? "flex flex-col bg-gradient-to-br from-[#111] to-[#0d0d0d] border-white/20 shadow-[0_0_60px_rgba(34,211,238,0.06)] z-10"
+                : "hidden md:flex md:flex-col bg-[#0a0a0a] border-white/8 opacity-60"
             }`}
     >
         {/* Decorative quote */}
@@ -130,7 +130,26 @@ export default function Testimonials() {
     // Show 3 cards on desktop (centered + neighbours)
     const getVisible = () => {
         if (testimonials.length === 0) return [];
-        if (testimonials.length === 1) return [{ item: testimonials[0], isActive: true, key: `${testimonials[0].id}-0` }];
+        if (testimonials.length === 1) {
+            return [{ item: testimonials[0], isActive: true, key: `${testimonials[0].id}-0` }];
+        }
+
+        if (testimonials.length === 2) {
+            const nextIndex = (activeIndex + 1) % testimonials.length;
+            return [
+                {
+                    item: testimonials[activeIndex],
+                    isActive: true,
+                    key: `${testimonials[activeIndex].id}-${activeIndex}`,
+                },
+                {
+                    item: testimonials[nextIndex],
+                    isActive: false,
+                    key: `${testimonials[nextIndex].id}-${nextIndex}`,
+                },
+            ];
+        }
+
         const indices = [
             (activeIndex - 1 + testimonials.length) % testimonials.length,
             activeIndex,
@@ -220,8 +239,8 @@ export default function Testimonials() {
                                     onClick={() => setActiveIndex(i)}
                                     aria-label={`Go to testimonial ${i + 1}`}
                                     className={`rounded-full transition-all duration-300 ${i === activeIndex
-                                            ? "w-8 h-2 bg-gradient-to-r from-cyan-400 to-pink-500"
-                                            : "w-2 h-2 bg-white/20 hover:bg-white/40"
+                                        ? "w-8 h-2 bg-gradient-to-r from-cyan-400 to-pink-500"
+                                        : "w-2 h-2 bg-white/20 hover:bg-white/40"
                                         }`}
                                 />
                             ))}
