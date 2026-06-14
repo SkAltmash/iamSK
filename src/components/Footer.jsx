@@ -143,16 +143,6 @@ export default function Footer() {
                         </p>
                     </div>
 
-                    <div className="flex gap-8 text-xs font-bold uppercase tracking-widest">
-                        <Link to="#" className="text-gray-500 hover:text-white transition">Privacy</Link>
-                        <Link to="#" className="text-gray-500 hover:text-white transition">Terms</Link>
-                        <button
-                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                            className="text-cyan-400 hover:text-cyan-300 transition"
-                        >
-                            Back to Top ↑
-                        </button>
-                    </div>
                 </div>
             </motion.div>
         </footer>
