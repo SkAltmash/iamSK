@@ -44,11 +44,22 @@ export default function ProjectDetails() {
   return (
     <div className="min-h-screen bg-[#0b0b0b] text-white">
       <Helmet>
-        <title>{project.title} | Altamash Portfolio</title>
-        <meta name="description" content={project.description || `Read about ${project.title}`} />
-        <meta property="og:title" content={project.title} />
-        <meta property="og:description" content={project.description} />
-        {project.image && <meta property="og:image" content={project.image} />}
+        <title>{project.title} | Altamash Sheikh Portfolio</title>
+        <meta name="description" content={project.description || `Read about the case study of ${project.title} developed by Altamash Sheikh.`} />
+        <link rel="canonical" href={`https://www.altamash.xyz/projects/${slug}`} />
+        
+        {/* Open Graph */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://www.altamash.xyz/projects/${slug}`} />
+        <meta property="og:title" content={`${project.title} | Altamash Sheikh Portfolio`} />
+        <meta property="og:description" content={project.description || `Case study of ${project.title} built with ${Array.isArray(project.technologies) ? project.technologies.join(', ') : 'modern tech'}.`} />
+        {project.image && <meta property="og:image" content={project.image.startsWith('http') ? project.image : `https://www.altamash.xyz/${project.image}`} />}
+        
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content={`${project.title} | Altamash Sheikh Portfolio`} />
+        <meta property="twitter:description" content={project.description} />
+        {project.image && <meta property="twitter:image" content={project.image.startsWith('http') ? project.image : `https://www.altamash.xyz/${project.image}`} />}
       </Helmet>
 
       {/* Back Button */}

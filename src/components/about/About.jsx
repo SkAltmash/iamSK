@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useSpring, useTransform, useInView } from "framer-motion";
 import { Rocket, Code, Zap, Briefcase, GraduationCap, ExternalLink } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 /* ------------------- UTILS & CONSTANTS ------------------- */
 
@@ -102,6 +103,19 @@ const About = () => {
 
   return (
     <section className="relative w-full min-h-screen py-24 bg-[#030303] text-white flex flex-col items-center px-6 overflow-hidden">
+      <Helmet>
+        <title>About Altamash Sheikh | Education & Experience</title>
+        <meta name="description" content="Learn more about Altamash Sheikh, a BCA graduate in Software Engineering. Explore educational background, modern skill sets, framework expertise, and coding philosophy." />
+        <meta name="keywords" content="About Altamash Sheikh, BCA Wardha, Software Engineer, React Developer, developer education, full stack developer background" />
+        <link rel="canonical" href="https://www.altamash.xyz/about" />
+        
+        {/* Open Graph */}
+        <meta property="og:type" content="profile" />
+        <meta property="og:url" content="https://www.altamash.xyz/about" />
+        <meta property="og:title" content="About Altamash Sheikh | Education & Experience" />
+        <meta property="og:description" content="Learn more about Altamash Sheikh, a BCA graduate in Software Engineering. Explore educational background, modern skill sets, and framework expertise." />
+        <meta property="og:image" content="https://www.altamash.xyz/logo.png" />
+      </Helmet>
 
       {/* Background Layering */}
       <div className="absolute inset-0 z-0">

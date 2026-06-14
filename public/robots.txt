@@ -1,0 +1,13 @@
+# https://www.robotstxt.org/
+
+User-agent: *
+Allow: /
+Allow: /home
+Allow: /about
+Allow: /projects
+Allow: /contact
+Disallow: /admin/
+Disallow: /admin
+
+# Sitemap link
+Sitemap: https://www.altamash.xyz/sitemap.xml

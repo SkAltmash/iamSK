@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const Splash = () => {
   const navigate = useNavigate();
@@ -31,6 +32,11 @@ const Splash = () => {
 
   return (
     <section className="relative min-h-screen bg-black flex flex-col justify-center items-center overflow-hidden">
+      <Helmet>
+        <title>Altamash Sheikh | Portfolio</title>
+        <meta name="description" content="Welcome to the digital portfolio of Altamash Sheikh, a Full Stack Developer & React Native Specialist." />
+        <link rel="canonical" href="https://www.altamash.xyz/" />
+      </Helmet>
 
       {/* 🌈 Subtle Background Glow */}
       <div className="absolute inset-0 flex justify-center items-center">

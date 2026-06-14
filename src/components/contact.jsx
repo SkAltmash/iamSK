@@ -3,6 +3,7 @@ import { FaEnvelope, FaGithub, FaLinkedin, FaPaperPlane, FaDownload } from "reac
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
 import { doc, getDoc } from "firebase/firestore";
+import { Helmet } from "react-helmet-async";
 
 // Reusable Contact Card Component
 const ContactCard = ({ Icon, title, description, link, linkText, subText, href, external }) => (
@@ -89,6 +90,20 @@ export default function Contact() {
 
   return (
     <section id="contact" className="relative pt-25 py-20 bg-black text-white">
+      <Helmet>
+        <title>Contact Altamash Sheikh | Full Stack & React Native Developer</title>
+        <meta name="description" content="Get in touch with Altamash Sheikh for freelance projects, full-stack web development, and React Native mobile app development. Available for remote contract opportunities." />
+        <meta name="keywords" content="Contact Altamash Sheikh, Hire Full Stack Developer, Hire React Native Developer, skaltmash3@gmail.com, software developer freelance" />
+        <link rel="canonical" href="https://www.altamash.xyz/contact" />
+        
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.altamash.xyz/contact" />
+        <meta property="og:title" content="Contact Altamash Sheikh | Full Stack & React Native Developer" />
+        <meta property="og:description" content="Get in touch with Altamash Sheikh for freelance projects, web development, and React Native mobile applications." />
+        <meta property="og:image" content="https://www.altamash.xyz/logo.png" />
+      </Helmet>
+
       {/* Header */}
       <motion.div
         className="text-center mb-12"
