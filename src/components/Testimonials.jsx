@@ -100,7 +100,7 @@ export default function Testimonials() {
               </p>
 
               <div className="flex items-center gap-4 mt-auto">
-                <div className="w-14 h-14 rounded-full overflow-hidden bg-cyan-500/20 border-2 border-cyan-500/30 shrink-0">
+                <div className="w-14 h-14 rounded-full overflow-hidden bg-cyan-500/20   shrink-0">
                   {item.avatar ? (
                     <img
                       src={item.avatar}

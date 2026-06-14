@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { motion } from "framer-motion";
 import {
-    FaBriefcase, FaCode, FaTrophy, FaLayerGroup, FaSignOutAlt, FaHome, FaTools, FaEnvelope, FaFilePdf, FaQuoteLeft, FaNewspaper, FaChartLine, FaTags
+    FaBriefcase, FaCode, FaTrophy, FaLayerGroup, FaSignOutAlt, FaHome, FaEnvelope, FaFilePdf, FaQuoteLeft, FaChartLine, FaTags
 } from "react-icons/fa";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -16,13 +16,6 @@ const cards = [
         icon: <FaBriefcase size={28} />,
         to: "/admin/client-projects",
         gradient: "from-cyan-500 to-blue-600",
-    },
-    {
-        title: "Services",
-        desc: "Manage the services you offer",
-        icon: <FaTools size={28} />,
-        to: "/admin/services",
-        gradient: "from-purple-500 to-pink-600",
     },
     {
         title: "Pricing Packages",
@@ -66,34 +59,26 @@ const cards = [
         to: "/admin/testimonials",
         gradient: "from-yellow-400 to-orange-500",
     },
-    {
-        title: "Blogs",
-        desc: "Write & publish articles",
-        icon: <FaNewspaper size={28} />,
-        to: "/admin/blogs",
-        gradient: "from-pink-500 to-rose-600",
-    }
+    
 ];
 
 export default function AdminDashboard() {
     const { logout, currentUser } = useAuth();
     const navigate = useNavigate();
-    const [stats, setStats] = useState({ projects: 0, msgs: 0, blogs: 0 });
+    const [stats, setStats] = useState({ projects: 0, msgs: 0 });
     const [loadingStats, setLoadingStats] = useState(true);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const [projSnap, msgSnap, blogSnap] = await Promise.all([
+                const [projSnap, msgSnap] = await Promise.all([
                     getDocs(collection(db, "clientProjects")),
-                    getDocs(query(collection(db, "messages"), where("read", "==", false))),
-                    getDocs(collection(db, "blogs"))
+                    getDocs(query(collection(db, "messages"), where("read", "==", false)))
                 ]);
 
                 setStats({
                     projects: projSnap.size,
-                    msgs: msgSnap.size, // Unread messages
-                    blogs: blogSnap.size
+                    msgs: msgSnap.size // Unread messages
                 });
             } catch (err) {
                 console.error("Failed to load stats", err);
@@ -163,15 +148,6 @@ export default function AdminDashboard() {
                             </div>
                             <div className="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center">
                                 <FaEnvelope size={20} />
-                            </div>
-                        </div>
-                        <div className="bg-[#111] border border-white/10 p-6 rounded-2xl flex items-center justify-between shadow-xl">
-                            <div>
-                                <p className="text-gray-400 text-sm font-medium mb-1">Published Blogs</p>
-                                <h3 className="text-3xl font-bold text-white">{stats.blogs}</h3>
-                            </div>
-                            <div className="w-12 h-12 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center">
-                                <FaNewspaper size={20} />
                             </div>
                         </div>
                     </div>
