@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaArrowLeft, FaSpinner } from "react-icons/fa";
+import { FaArrowLeft, FaSpinner, FaGooglePlay } from "react-icons/fa";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { Helmet } from "react-helmet-async";
@@ -116,6 +116,16 @@ export default function ProjectDetails() {
               className="inline-block px-6 py-3 bg-cyan-400 text-black font-bold rounded-lg hover:bg-cyan-300 transition"
             >
               Visit Live Website
+            </a>
+          )}
+          {project.playStoreLink && (
+            <a
+              href={project.playStoreLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 text-white font-bold rounded-lg hover:bg-emerald-400 transition ml-3"
+            >
+              <FaGooglePlay /> Download on Play Store
             </a>
           )}
         </div>

@@ -18,7 +18,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 const EMPTY = {
     title: "", slug: "", description: "", image: "", status: "Delivered to Client",
-    technologies: "", impact: "", live: "", youtube: "", order: 0
+    technologies: "", impact: "", live: "", youtube: "", playStoreLink: "", order: 0
 };
 
 function SortableProjectCard({ project, onEdit, onDelete }) {
@@ -129,6 +129,7 @@ export default function ClientProjectsAdmin() {
             impact: Array.isArray(p.impact) ? p.impact.join("\n") : "",
             live: p.live || "",
             youtube: p.youtube || "",
+            playStoreLink: p.playStoreLink || "",
             order: p.order || 0,
         });
         setImagePreview(p.image || "");
@@ -167,6 +168,7 @@ export default function ClientProjectsAdmin() {
                 impact: form.impact.split("\n").map((i) => i.trim()).filter(Boolean),
                 live: form.live.trim(),
                 youtube: form.youtube.trim(),
+                playStoreLink: form.playStoreLink.trim(),
                 order: form.order,
                 updatedAt: new Date(),
             };
@@ -333,6 +335,9 @@ export default function ClientProjectsAdmin() {
                                     </div>
                                     <InputField label="Live URL" value={form.live} placeholder="https://..." onChange={(v) => setForm({ ...form, live: v })} />
                                     <InputField label="YouTube Embed URL" value={form.youtube} placeholder="https://www.youtube.com/embed/..." onChange={(v) => setForm({ ...form, youtube: v })} />
+                                    <div className="col-span-2">
+                                        <InputField label="Play Store Link" value={form.playStoreLink} placeholder="https://play.google.com/store/apps/details?id=..." onChange={(v) => setForm({ ...form, playStoreLink: v })} />
+                                    </div>
                                 </div>
 
                                 <div className="flex gap-3 pt-2">
