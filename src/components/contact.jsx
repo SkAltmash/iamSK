@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import { FaEnvelope, FaGithub, FaLinkedin, FaPaperPlane, FaDownload } from "react-icons/fa";
 import { motion } from "framer-motion";
-import emailjs from "@emailjs/browser";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase";
 import { Helmet } from "react-helmet-async";
 
 // Reusable Contact Card Component
@@ -36,7 +36,6 @@ export default function Contact() {
   React.useEffect(() => {
     const fetchResume = async () => {
       try {
-        const { db } = await import("../firebase");
         const docRef = doc(db, "globals", "resume");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists() && docSnap.data().url) {
@@ -49,43 +48,29 @@ export default function Contact() {
     fetchResume();
   }, []);
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    emailjs
-      .sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE,
-        import.meta.env.VITE_EMAILJS_TEMPLATE,
-        form.current,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      )
-      .then(async () => {
-        try {
-          const { addDoc, collection } = await import("firebase/firestore");
-          const { db } = await import("../firebase");
-          await addDoc(collection(db, "messages"), {
-            name: form.current.user_name.value,
-            email: form.current.user_email.value,
-            subject: form.current.subject.value,
-            message: form.current.message.value,
-            createdAt: new Date(),
-            read: false
-          });
-        } catch (dbErr) {
-          console.error("Failed to save to db", dbErr);
-        }
-
-        setSent(true);
-        form.current.reset();
-        setLoading(false);
-        setTimeout(() => setSent(false), 5000);
-      })
-      .catch((error) => {
-        console.error("FAILED TO SEND", error);
-        alert("Something went wrong. Please try again.");
-        setLoading(false);
+    try {
+      await addDoc(collection(db, "messages"), {
+        name: form.current.user_name.value,
+        email: form.current.user_email.value,
+        subject: form.current.subject.value,
+        message: form.current.message.value,
+        createdAt: new Date(),
+        read: false,
       });
+
+      setSent(true);
+      form.current.reset();
+      setTimeout(() => setSent(false), 5000);
+    } catch (error) {
+      console.error("Failed to send message", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
